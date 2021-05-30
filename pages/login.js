@@ -1,10 +1,10 @@
-import React from 'react'
+import Jumbotron from '../components/Jumbotron'
 
 const LoginPage = () => {
   return (
-    <div className='jumbotron text-center text-white bg-primary py-5'>
-      <h1>Login Page</h1>
-    </div>
+    <>
+      <Jumbotron title='Login' desc='Login to your account' />
+    </>
   )
 }
 

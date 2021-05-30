@@ -1,10 +1,11 @@
 import React from 'react'
+import Jumbotron from '../components/Jumbotron'
 
 const HomePage = () => {
   return (
-    <div className='jumbotron text-center text-white bg-primary py-5'>
-      <h1>Welcome!</h1>
-    </div>
+    <>
+      <Jumbotron title='eLearn' desc='Online Education Marketplace' />
+    </>
   )
 }
 

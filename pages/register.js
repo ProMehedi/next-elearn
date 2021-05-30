@@ -1,10 +1,10 @@
-import React from 'react'
+import Jumbotron from '../components/Jumbotron'
 
 const RegisterPage = () => {
   return (
-    <div className='jumbotron text-center text-white bg-primary py-5'>
-      <h1>Register Page</h1>
-    </div>
+    <>
+      <Jumbotron title='Register' desc='Register for a new account' />
+    </>
   )
 }
 

@@ -7,3 +7,9 @@
 .jumbotron p {
   color: inherit;
 }
+
+.jumbotron p {
+  font-size: 1.3rem;
+  letter-spacing: 3px;
+  font-weight: 300;
+}
