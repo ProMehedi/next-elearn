@@ -28,17 +28,14 @@ const LoginPage = () => {
     setLoading(true)
 
     try {
-      const { data } = await axios.post(`api/users`, {
-        email,
-        password,
-      })
+      const { data } = await axios.post(`api/users/login`, { email, password })
       setMessage('')
       setLoading(false)
-      toast.success('Login successful!')
       console.log(data)
+      toast.success('Login successful!')
     } catch (error) {
-      setMessage(error.response.statusText)
       setLoading(false)
+      setMessage(error.response.data)
     }
   }
 

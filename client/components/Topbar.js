@@ -12,14 +12,14 @@ const Topbar = () => {
     setCurrent(e.key)
   }
   return (
-    <Navbar bg='light' expand='lg'>
+    <Navbar expand='lg'>
       <Container>
         <Navbar.Brand>
           <Link href='/'>E-LE@RN</Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
-          <Nav className='ms-auto'>
+          <Nav variant='pills' className='ms-auto'>
             <ActiveLink href='/'>
               <Nav.Link as='a'>
                 <HomeOutlined /> Home

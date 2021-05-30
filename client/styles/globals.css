@@ -3,6 +3,10 @@
   font-size: 1.5rem;
 }
 
+.navbar .nav-pills .nav-link.active {
+  color: #fff;
+}
+
 .navbar-brand a {
   color: inherit;
 }
