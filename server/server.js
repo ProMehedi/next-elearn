@@ -3,6 +3,7 @@ import cors from 'cors'
 import colors from 'colors'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
+import userRoutes from './routes/userRoutes.js'
 
 // Enable .env
 dotenv.config()
@@ -21,6 +22,9 @@ app.use(express.json())
 const API_URL = process.env.API_URL || '/api'
 const PORT = process.env.PORT || 5000
 const NODE_ENV = process.env.NODE_ENV
+
+// User Routes
+app.use(`${API_URL}/users`, userRoutes)
 
 app.get('/', (req, res) => {
   res.send('API is running..')
