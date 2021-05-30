@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { HomeOutlined, LoginOutlined, UserAddOutlined } from '@ant-design/icons'
 import { Container, Nav, Navbar } from 'react-bootstrap'
+import ActiveLink from './ActiveLink'
 
 const Topbar = () => {
   const [current, setCurrent] = useState('home')
@@ -19,21 +20,21 @@ const Topbar = () => {
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='ms-auto'>
-            <Link href='/'>
-              <a className='nav-link'>
+            <ActiveLink href='/'>
+              <Nav.Link as='a'>
                 <HomeOutlined /> Home
-              </a>
-            </Link>
-            <Link href='/login'>
-              <a className='nav-link'>
+              </Nav.Link>
+            </ActiveLink>
+            <ActiveLink href='/login'>
+              <Nav.Link as='a'>
                 <LoginOutlined /> Login
-              </a>
-            </Link>
-            <Link href='/register'>
-              <a className='nav-link'>
+              </Nav.Link>
+            </ActiveLink>
+            <ActiveLink href='/register'>
+              <Nav.Link as='a'>
                 <UserAddOutlined /> Register
-              </a>
-            </Link>
+              </Nav.Link>
+            </ActiveLink>
           </Nav>
         </Navbar.Collapse>
       </Container>
