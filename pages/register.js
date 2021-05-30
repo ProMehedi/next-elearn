@@ -1,11 +1,11 @@
 import React from 'react'
 
-const HomePage = () => {
+const RegisterPage = () => {
   return (
     <div className='jumbotron text-center text-white bg-primary py-5'>
-      <h1>Welcome!</h1>
+      <h1>Register Page</h1>
     </div>
   )
 }
 
-export default HomePage
+export default RegisterPage
