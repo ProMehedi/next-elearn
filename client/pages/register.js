@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Col, Container, Row, Card, Form, Button, Alert } from 'react-bootstrap'
 import Jumbotron from '../components/Jumbotron'
+import { toast } from 'react-toastify'
 
 const RegisterPage = () => {
   const [name, setName] = useState('')
@@ -45,8 +46,15 @@ const RegisterPage = () => {
       password,
     })
     setMessage('')
+    toast.success('Registration successful!')
     console.log(data)
   }
+
+  useEffect(() => {
+    if (message) {
+      toast.error(message)
+    }
+  }, [message])
 
   return (
     <>
