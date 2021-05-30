@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
-import { Menu } from 'antd'
 import { HomeOutlined, LoginOutlined, UserAddOutlined } from '@ant-design/icons'
-import { Container } from 'react-bootstrap'
+import { Container, Nav, Navbar } from 'react-bootstrap'
 
 const Topbar = () => {
   const [current, setCurrent] = useState('home')
@@ -11,25 +10,33 @@ const Topbar = () => {
     setCurrent(e.key)
   }
   return (
-    <Container>
-      <Menu onClick={handleClick} selectedKeys={[current]} mode='horizontal'>
-        <Menu.Item key='home' icon={<HomeOutlined />}>
-          <Link href='/'>
-            <a>Home</a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item key='login' icon={<LoginOutlined />}>
-          <Link href='/login'>
-            <a>Login</a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item key='register' icon={<UserAddOutlined />}>
-          <Link href='/register'>
-            <a>Register</a>
-          </Link>
-        </Menu.Item>
-      </Menu>
-    </Container>
+    <Navbar bg='light' expand='lg'>
+      <Container>
+        <Navbar.Brand>
+          <Link href='/'>E-LE@RN</Link>
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls='basic-navbar-nav' />
+        <Navbar.Collapse id='basic-navbar-nav'>
+          <Nav className='ms-auto'>
+            <Link href='/'>
+              <a className='nav-link'>
+                <HomeOutlined /> Home
+              </a>
+            </Link>
+            <Link href='/login'>
+              <a className='nav-link'>
+                <LoginOutlined /> Login
+              </a>
+            </Link>
+            <Link href='/register'>
+              <a className='nav-link'>
+                <UserAddOutlined /> Register
+              </a>
+            </Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   )
 }
 
