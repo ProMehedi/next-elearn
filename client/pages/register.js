@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import axios from 'axios'
 import { Col, Container, Row, Card, Form, Button } from 'react-bootstrap'
 import Jumbotron from '../components/Jumbotron'
 
@@ -8,9 +9,14 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log({ name, email, password, confirmPass })
+    const { data } = await axios.post(`http://localhost:5000/api/users`, {
+      name,
+      email,
+      password,
+    })
+    console.log(data)
   }
 
   return (
