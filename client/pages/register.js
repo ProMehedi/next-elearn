@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { BeatLoader, ClipLoader } from 'react-spinners'
 import { Col, Container, Row, Card, Form, Button, Alert } from 'react-bootstrap'
 import Jumbotron from '../components/Jumbotron'
 import { toast } from 'react-toastify'
@@ -10,6 +11,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
   const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -40,14 +42,22 @@ const RegisterPage = () => {
       return false
     }
 
-    const { data } = await axios.post(`http://localhost:5000/api/users`, {
-      name,
-      email,
-      password,
-    })
-    setMessage('')
-    toast.success('Registration successful!')
-    console.log(data)
+    setLoading(true)
+
+    try {
+      const { data } = await axios.post(`http://localhost:5000/api/users`, {
+        name,
+        email,
+        password,
+      })
+      setMessage('')
+      setLoading(false)
+      toast.success('Registration successful!')
+      console.log(data)
+    } catch (error) {
+      setMessage(error.response.statusText)
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -101,8 +111,12 @@ const RegisterPage = () => {
                       onChange={(e) => setConfirmPass(e.target.value)}
                     />
                   </Form.Group>
-                  <Button type='submit' className='d-block w-100'>
-                    Register
+                  <Button
+                    type='submit'
+                    className='d-block w-100'
+                    disabled={loading}
+                  >
+                    REGISTER {loading && <BeatLoader size={10} color='white' />}
                   </Button>
                 </Form>
               </Card.Body>
