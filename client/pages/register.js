@@ -45,14 +45,11 @@ const RegisterPage = () => {
     setLoading(true)
 
     try {
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API}/users`,
-        {
-          name,
-          email,
-          password,
-        }
-      )
+      const { data } = await axios.post(`api/users`, {
+        name,
+        email,
+        password,
+      })
       setMessage('')
       setLoading(false)
       toast.success('Registration successful!')
