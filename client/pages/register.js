@@ -1,6 +1,7 @@
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { BeatLoader, ClipLoader } from 'react-spinners'
+import { BeatLoader } from 'react-spinners'
 import { Col, Container, Row, Card, Form, Button, Alert } from 'react-bootstrap'
 import Jumbotron from '../components/Jumbotron'
 import { toast } from 'react-toastify'
@@ -121,6 +122,9 @@ const RegisterPage = () => {
                 </Form>
               </Card.Body>
             </Card>
+            <p className='text-center my-3'>
+              Already have an account? <Link href='/login'>Login</Link>{' '}
+            </p>
             {message && (
               <div className='my-3'>
                 <Alert variant='danger'>{message}</Alert>
