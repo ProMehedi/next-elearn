@@ -4,9 +4,13 @@ import colors from 'colors'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import userRoutes from './routes/userRoutes.js'
+import connectDB from './config/db.js'
 
 // Enable .env
 dotenv.config()
+
+// Enable MongoDB Connection
+connectDB()
 
 const app = express()
 
