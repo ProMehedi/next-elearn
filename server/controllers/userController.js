@@ -41,16 +41,12 @@ export const authUser = asyncHandler(async (req, res) => {
   }
 
   if (user && (await user.mathPassword(password))) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user._id),
-    })
     res.cookie('token', generateToken(user._id), {
-      httpOnly: true,
+      expires: new Date(Date.now() + 604800000),
+      httpOnly: false,
       // secure: true
     })
+    res.status(200).send({ user, token: generateToken(user._id) })
   } else {
     res.status(401)
     throw new Error('Invalid email or password')
