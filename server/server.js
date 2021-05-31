@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import dotenv from 'dotenv'
 import userRoutes from './routes/userRoutes.js'
 import connectDB from './config/db.js'
+import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 
 // Enable .env
 dotenv.config()
@@ -33,6 +34,12 @@ app.use(`${API_URL}/users`, userRoutes)
 app.get('/', (req, res) => {
   res.send('API is running..')
 })
+
+// Not Found Middleware
+app.use(notFound)
+
+// Error Handler Middleware
+app.use(errorHandler)
 
 app.listen(
   PORT,

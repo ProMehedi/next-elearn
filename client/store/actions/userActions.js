@@ -28,3 +28,10 @@ export const login = (email, password) => async (dispatch) => {
     })
   }
 }
+
+export const logout = () => (dispatch) => {
+  localStorage.removeItem('userInfo')
+  // clearCookies('token')
+  document.cookie = 'token' + '=; Max-Age=0'
+  dispatch({ type: USER.USER_LOGOUT })
+}

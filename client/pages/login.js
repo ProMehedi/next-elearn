@@ -1,49 +1,47 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
 import { BeatLoader } from 'react-spinners'
-import { Col, Container, Row, Card, Form, Button, Alert } from 'react-bootstrap'
+import { Col, Container, Row, Card, Form, Button } from 'react-bootstrap'
 import Jumbotron from '../components/Jumbotron'
 import { toast } from 'react-toastify'
+import { login } from '../store/actions/userActions'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [message, setMessage] = useState('')
-  const [loading, setLoading] = useState(false)
+
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo, loading, error } = userLogin
+
+  useEffect(() => {
+    if (userInfo) {
+      router.push('/')
+    }
+    if (error) {
+      toast.error(error)
+    }
+  }, [router, userInfo, error])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     // Validations
     if (!email) {
-      setMessage('Email is required!')
+      toast.error('Email is required!')
       return false
     }
     if (!password) {
-      setMessage('Password is required!')
+      toast.error('Password is required!')
       return false
     }
 
-    setLoading(true)
-
-    try {
-      const { data } = await axios.post(`api/users/login`, { email, password })
-      setMessage('')
-      setLoading(false)
-      console.log(data)
-      toast.success('Login successful!')
-    } catch (error) {
-      setLoading(false)
-      setMessage(error.response.data)
-    }
+    dispatch(login(email, password))
   }
-
-  useEffect(() => {
-    if (message) {
-      toast.error(message)
-    }
-  }, [message])
 
   return (
     <>
@@ -85,11 +83,6 @@ const LoginPage = () => {
             <p className='text-center my-3'>
               Dont have an account? <Link href='/register'>Register</Link>{' '}
             </p>
-            {message && (
-              <div className='my-3'>
-                <Alert variant='danger'>{message}</Alert>
-              </div>
-            )}
           </Col>
         </Row>
       </Container>

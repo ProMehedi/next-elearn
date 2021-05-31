@@ -1,15 +1,16 @@
-import react from 'react'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import Link from 'next/link'
 import { HomeOutlined, LoginOutlined, UserAddOutlined } from '@ant-design/icons'
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import ActiveLink from './ActiveLink'
+import { logout } from '../store/actions/userActions'
 
 const Topbar = () => {
-  const [current, setCurrent] = useState('home')
+  const dispatch = useDispatch()
 
-  const handleClick = (e) => {
-    setCurrent(e.key)
+  const logoutHandler = (e) => {
+    dispatch(logout())
   }
   return (
     <Navbar expand='lg'>
@@ -35,6 +36,9 @@ const Topbar = () => {
                 <UserAddOutlined /> Register
               </Nav.Link>
             </ActiveLink>
+            <Nav.Link className='active' as='a' onClick={logoutHandler}>
+              <UserAddOutlined /> Logout
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
