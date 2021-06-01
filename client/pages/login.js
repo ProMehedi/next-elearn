@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { BeatLoader } from 'react-spinners'
+import { BeatLoader, ScaleLoader } from 'react-spinners'
 import { Col, Container, Row, Card, Form, Button } from 'react-bootstrap'
 import Jumbotron from '../components/Jumbotron'
 import { toast } from 'react-toastify'
@@ -19,13 +19,13 @@ const LoginPage = () => {
   const { userInfo, loading, error } = userLogin
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && userInfo !== null) {
       router.push('/')
     }
     if (error) {
       toast.error(error)
     }
-  }, [router, userInfo, error])
+  }, [userInfo, error])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -41,6 +41,10 @@ const LoginPage = () => {
     }
 
     dispatch(login(email, password))
+  }
+
+  if (loading) {
+    return <ScaleLoader size={50} />
   }
 
   return (

@@ -1,71 +1,72 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
-import { BeatLoader } from 'react-spinners'
+import { BeatLoader, ScaleLoader } from 'react-spinners'
 import { Col, Container, Row, Card, Form, Button, Alert } from 'react-bootstrap'
 import Jumbotron from '../components/Jumbotron'
 import { toast } from 'react-toastify'
+import { register } from '../store/actions/userActions'
 
 const RegisterPage = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
-  const [message, setMessage] = useState('')
-  const [loading, setLoading] = useState(false)
+
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const userRegister = useSelector((state) => state.userRegister)
+  const { loading: loadingRegister, error } = userRegister
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo, loading } = userLogin
+
+  useEffect(() => {
+    if (userInfo && userInfo !== null) {
+      router.push('/')
+    }
+    if (error) {
+      toast.error(error)
+    }
+  }, [userInfo, error])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     // Validations
     if (!name) {
-      setMessage('Name is required!')
+      toast.error('Name is required!')
       return false
     }
     if (!email) {
-      setMessage('Email is required!')
+      toast.error('Email is required!')
       return false
     }
     if (!password) {
-      setMessage('Password is required!')
+      toast.error('Password is required!')
       return false
     }
     if (password.length < 6) {
-      setMessage("Password can't be less than 6 characters!")
+      toast.error("Password can't be less than 6 characters!")
       return false
     }
     if (password.length > 65) {
-      setMessage("Password can't be longer than 65 characters!")
+      toast.error("Password can't be longer than 65 characters!")
       return false
     }
     if (password != confirmPass) {
-      setMessage('Password not match!')
+      toast.error('Password not match!')
       return false
     }
 
-    setLoading(true)
-
-    try {
-      const { data } = await axios.post(`api/users`, {
-        name,
-        email,
-        password,
-      })
-      setMessage('')
-      setLoading(false)
-      toast.success('Registration successful!')
-      console.log(data)
-    } catch (error) {
-      setMessage(error.response.statusText)
-      setLoading(false)
-    }
+    dispatch(register(name, email, password))
   }
 
-  useEffect(() => {
-    if (message) {
-      toast.error(message)
-    }
-  }, [message])
+  if (loading) {
+    return <ScaleLoader size={50} />
+  }
 
   return (
     <>
@@ -115,9 +116,10 @@ const RegisterPage = () => {
                   <Button
                     type='submit'
                     className='d-block w-100'
-                    disabled={loading}
+                    disabled={loadingRegister}
                   >
-                    REGISTER {loading && <BeatLoader size={10} color='white' />}
+                    REGISTER{' '}
+                    {loadingRegister && <BeatLoader size={10} color='white' />}
                   </Button>
                 </Form>
               </Card.Body>
@@ -125,11 +127,6 @@ const RegisterPage = () => {
             <p className='text-center my-3'>
               Already have an account? <Link href='/login'>Login</Link>{' '}
             </p>
-            {message && (
-              <div className='my-3'>
-                <Alert variant='danger'>{message}</Alert>
-              </div>
-            )}
           </Col>
         </Row>
       </Container>

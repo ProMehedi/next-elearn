@@ -5,6 +5,7 @@ import * as USER from './reducers/userReducers'
 
 const reducer = combineReducers({
   userLogin: USER.userLoginReducer,
+  userRegister: USER.userRegisterReducer,
 })
 
 const ISSERVER = typeof window === 'undefined'

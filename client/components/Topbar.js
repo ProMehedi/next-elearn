@@ -1,7 +1,12 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useRouter } from 'next/router'
+import { useDispatch, useSelector } from 'react-redux'
 import Link from 'next/link'
-import { HomeOutlined, LoginOutlined, UserAddOutlined } from '@ant-design/icons'
+import {
+  HomeOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  UserAddOutlined,
+} from '@ant-design/icons'
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import ActiveLink from './ActiveLink'
 import { logout } from '../store/actions/userActions'
@@ -9,9 +14,13 @@ import { logout } from '../store/actions/userActions'
 const Topbar = () => {
   const dispatch = useDispatch()
 
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo, loading } = userLogin
+
   const logoutHandler = (e) => {
     dispatch(logout())
   }
+
   return (
     <Navbar expand='lg'>
       <Container>
@@ -26,19 +35,25 @@ const Topbar = () => {
                 <HomeOutlined /> Home
               </Nav.Link>
             </ActiveLink>
-            <ActiveLink href='/login'>
-              <Nav.Link as='a'>
-                <LoginOutlined /> Login
+            {!userInfo && (
+              <>
+                <ActiveLink href='/login'>
+                  <Nav.Link as='a'>
+                    <LoginOutlined /> Login
+                  </Nav.Link>
+                </ActiveLink>
+                <ActiveLink href='/register'>
+                  <Nav.Link as='a'>
+                    <UserAddOutlined /> Register
+                  </Nav.Link>
+                </ActiveLink>
+              </>
+            )}
+            {userInfo && (
+              <Nav.Link as='a' onClick={logoutHandler}>
+                <LogoutOutlined /> Logout
               </Nav.Link>
-            </ActiveLink>
-            <ActiveLink href='/register'>
-              <Nav.Link as='a'>
-                <UserAddOutlined /> Register
-              </Nav.Link>
-            </ActiveLink>
-            <Nav.Link className='active' as='a' onClick={logoutHandler}>
-              <UserAddOutlined /> Logout
-            </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
