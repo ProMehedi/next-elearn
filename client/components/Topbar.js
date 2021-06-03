@@ -51,12 +51,12 @@ const Topbar = () => {
             )}
             {userInfo && (
               <NavDropdown title={userInfo.user.name} id='user' alignRight>
-                <ActiveLink href='/dashboard'>
+                <ActiveLink href='/user'>
                   <NavDropdown.Item as='a'>
                     <LogoutOutlined /> Dashboard
                   </NavDropdown.Item>
                 </ActiveLink>
-                <ActiveLink href='/profile'>
+                <ActiveLink href='/user/profile'>
                   <NavDropdown.Item as='a'>
                     <UserOutlined /> My Profile
                   </NavDropdown.Item>

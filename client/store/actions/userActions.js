@@ -33,6 +33,7 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo')
   document.cookie = 'token' + '=; Max-Age=0'
   dispatch({ type: USER.USER_LOGOUT })
+  dispatch({ type: USER.USER_DETAILS_RESET })
 }
 
 export const register = (name, email, password) => async (dispatch) => {
@@ -56,6 +57,35 @@ export const register = (name, email, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER.USER_REGISTER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const getUserDetails = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER.USER_DETAILS_REQUEST })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/users/${id}`, config)
+
+    dispatch({ type: USER.USER_DETAILS_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: USER.USER_DETAILS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
