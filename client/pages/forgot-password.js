@@ -90,7 +90,7 @@ const ForgotPassPage = () => {
                 </Form>
               </Card.Body>
             </Card>
-            <p className='text-center text-success mb-3'>
+            <p className='text-center text-success my-3'>
               Dont have an account? <Link href='/register'>Register</Link>
             </p>
           </Col>

@@ -3,7 +3,7 @@ import {
   authUser,
   getUserProfile,
   registerUser,
-  sendTestEmail,
+  forgotPassword,
 } from '../controllers/userController.js'
 import { protect } from '../middleware/authMiddleware.js'
 const router = express.Router()
@@ -18,6 +18,6 @@ router.route('/login').post(authUser)
 router.route('/profile').get(protect, getUserProfile)
 
 // Send Email
-router.route('/send-email').get(protect, sendTestEmail)
+router.route('/forgot-password').get(protect, forgotPassword)
 
 export default router
