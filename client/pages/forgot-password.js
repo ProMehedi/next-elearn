@@ -8,9 +8,11 @@ import Jumbotron from '../components/Jumbotron'
 import { toast } from 'react-toastify'
 import { login } from '../store/actions/userActions'
 
-const LoginPage = () => {
+const ForgotPassPage = () => {
   const [email, setEmail] = useState('')
+  const [code, setCode] = useState('')
   const [password, setPassword] = useState('')
+  const [newPass, setNewPass] = useState('')
 
   const dispatch = useDispatch()
   const router = useRouter()
@@ -19,7 +21,7 @@ const LoginPage = () => {
   const { userInfo, loading, error } = userLogin
 
   useEffect(() => {
-    if (userInfo && userInfo !== null) {
+    if (userInfo) {
       router.push('/')
     }
     if (error) {
@@ -49,7 +51,10 @@ const LoginPage = () => {
 
   return (
     <>
-      <Jumbotron title='Login' desc='Login to your account' />
+      <Jumbotron
+        title='Forgot Password'
+        desc='Reset your account password now'
+      />
       <Container>
         <Row className='justify-content-center my-5'>
           <Col xl={4} lg={5} md={6} sm={8}>
@@ -79,17 +84,12 @@ const LoginPage = () => {
                     className='d-block w-100'
                     disabled={loading}
                   >
-                    LOGIN {loading && <BeatLoader size={10} color='white' />}
+                    RESET PASSWORD{' '}
+                    {loading && <BeatLoader size={10} color='white' />}
                   </Button>
                 </Form>
               </Card.Body>
             </Card>
-            <p className='text-center text-muted mt-3 mb-1'>
-              Forgot your password?{' '}
-              <Link href='/forgot-password'>
-                <a className='text-danger'>Reset Now!</a>
-              </Link>
-            </p>
             <p className='text-center text-success mb-3'>
               Dont have an account? <Link href='/register'>Register</Link>
             </p>
@@ -100,4 +100,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default ForgotPassPage
