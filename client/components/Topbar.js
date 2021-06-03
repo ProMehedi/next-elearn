@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import Link from 'next/link'
 import {
@@ -6,8 +5,9 @@ import {
   LoginOutlined,
   LogoutOutlined,
   UserAddOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
-import { Container, Nav, Navbar } from 'react-bootstrap'
+import { Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import ActiveLink from './ActiveLink'
 import { logout } from '../store/actions/userActions'
 
@@ -22,7 +22,7 @@ const Topbar = () => {
   }
 
   return (
-    <Navbar expand='lg'>
+    <Navbar expand='lg' collapseOnSelect>
       <Container>
         <Navbar.Brand>
           <Link href='/'>E-LE@RN</Link>
@@ -50,9 +50,21 @@ const Topbar = () => {
               </>
             )}
             {userInfo && (
-              <Nav.Link as='a' onClick={logoutHandler}>
-                <LogoutOutlined /> Logout
-              </Nav.Link>
+              <NavDropdown title={userInfo.user.name} id='user' alignRight>
+                <ActiveLink href='/dashboard'>
+                  <NavDropdown.Item as='a'>
+                    <LogoutOutlined /> Dashboard
+                  </NavDropdown.Item>
+                </ActiveLink>
+                <ActiveLink href='/profile'>
+                  <NavDropdown.Item as='a'>
+                    <UserOutlined /> My Profile
+                  </NavDropdown.Item>
+                </ActiveLink>
+                <NavDropdown.Item onClick={logoutHandler}>
+                  <LogoutOutlined /> Logout
+                </NavDropdown.Item>
+              </NavDropdown>
             )}
           </Nav>
         </Navbar.Collapse>
