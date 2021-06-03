@@ -1,8 +1,9 @@
+import AWS from 'aws-sdk'
+import bcrypt from 'bcryptjs'
+import { nanoid } from 'nanoid'
 import asyncHandler from 'express-async-handler'
 import User from '../models/userModel.js'
 import generateToken from '../utils/genarateToken.js'
-import { nanoid } from 'nanoid'
-import AWS from 'aws-sdk'
 
 const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -78,7 +79,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 
 // @desc    Auth User & Get Token
 // @route   POST /api/users/forgot-password
-// @access  Private
+// @access  Public
 export const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body
   const randomCode = nanoid(6).toUpperCase()
@@ -124,5 +125,27 @@ export const forgotPassword = asyncHandler(async (req, res) => {
       res.status(500)
       throw new Error('Something went wrong!')
     }
+  }
+})
+
+// @desc    Auth User & Get Token
+// @route   POST /api/users/reset-password
+// @access  Public
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { email, code, password } = req.body
+
+  const salt = await bcrypt.genSalt(10)
+  const hashedPassword = await bcrypt.hash(password, salt)
+
+  const user = await User.findOneAndUpdate(
+    { email, passwordResetCode: code },
+    { password: hashedPassword }
+  )
+
+  if (user) {
+    res.status(201).json({ success: true })
+  } else {
+    res.status(500)
+    throw new Error('Something went wrong!')
   }
 })

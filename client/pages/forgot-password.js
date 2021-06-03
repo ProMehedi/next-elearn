@@ -6,7 +6,8 @@ import { BeatLoader, ScaleLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
 import { Col, Container, Row, Card, Form, Button } from 'react-bootstrap'
 import Jumbotron from '../components/Jumbotron'
-import { forgotPassword } from '../store/actions/userActions'
+import { forgotPassword, resetPassword } from '../store/actions/userActions'
+import { USER_PASS_RESET_RESET } from '../store/constants/userConstants'
 
 const ForgotPassPage = () => {
   const [email, setEmail] = useState('')
@@ -20,8 +21,15 @@ const ForgotPassPage = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo, loading } = userLogin
 
+  const passForgot = useSelector((state) => state.passForgot)
+  const { success, loading: loadingForgot, error } = passForgot
+
   const passReset = useSelector((state) => state.passReset)
-  const { success, loading: loadingReset, error } = passReset
+  const {
+    success: successReset,
+    loading: loadingReset,
+    error: errorReset,
+  } = passReset
 
   useEffect(() => {
     if (userInfo) {
@@ -30,8 +38,15 @@ const ForgotPassPage = () => {
       if (error) {
         toast.error(error)
       }
+      if (errorReset) {
+        toast.error(errorReset)
+      }
+      if (successReset) {
+        router.push('/login')
+        dispatch({ type: USER_PASS_RESET_RESET })
+      }
     }
-  }, [userInfo, error])
+  }, [userInfo, error, errorReset])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -70,7 +85,7 @@ const ForgotPassPage = () => {
       return false
     }
 
-    // dispatch(resetPassword(email, code, password))
+    dispatch(resetPassword(email, code, password))
     console.log('Rest Password!')
   }
 
@@ -134,10 +149,10 @@ const ForgotPassPage = () => {
                   <Button
                     type='submit'
                     className='d-block w-100'
-                    disabled={loading}
+                    disabled={loadingForgot || loadingReset}
                   >
                     RESET {success ? 'NOW' : 'PASSWORD'}{' '}
-                    {loading ||
+                    {loadingForgot ||
                       (loadingReset && <BeatLoader size={10} color='white' />)}
                   </Button>
                 </Form>

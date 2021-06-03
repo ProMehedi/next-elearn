@@ -81,6 +81,9 @@ export const passResetReducer = (state = {}, action) => {
     case USER.USER_PASS_RESET_FAIL:
       return { loading: false, error: action.payload }
 
+    case USER.USER_PASS_RESET_RESET:
+      return {}
+
     default:
       return state
   }

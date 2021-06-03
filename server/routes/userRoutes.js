@@ -4,6 +4,7 @@ import {
   getUserProfile,
   registerUser,
   forgotPassword,
+  resetPassword,
 } from '../controllers/userController.js'
 import { protect } from '../middleware/authMiddleware.js'
 const router = express.Router()
@@ -17,7 +18,8 @@ router.route('/login').post(authUser)
 // User Profile
 router.route('/profile').get(protect, getUserProfile)
 
-// Send Email
+// Password Reset
 router.route('/forgot-password').post(forgotPassword)
+router.route('/reset-password').post(resetPassword)
 
 export default router
