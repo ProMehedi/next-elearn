@@ -77,7 +77,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 })
 
 // @desc    Auth User & Get Token
-// @route   GET /api/users/forgot-password
+// @route   POST /api/users/forgot-password
 // @access  Private
 export const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body

@@ -18,6 +18,6 @@ router.route('/login').post(authUser)
 router.route('/profile').get(protect, getUserProfile)
 
 // Send Email
-router.route('/forgot-password').get(protect, forgotPassword)
+router.route('/forgot-password').post(forgotPassword)
 
 export default router

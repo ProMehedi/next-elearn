@@ -53,3 +53,35 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
       return state
   }
 }
+
+export const passForgotReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER.USER_PASS_FORGOT_REQUEST:
+      return { loading: true }
+
+    case USER.USER_PASS_FORGOT_SUCCESS:
+      return { loading: false, success: true }
+
+    case USER.USER_PASS_FORGOT_FAIL:
+      return { loading: false, error: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const passResetReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER.USER_PASS_RESET_REQUEST:
+      return { loading: true }
+
+    case USER.USER_PASS_RESET_SUCCESS:
+      return { loading: false, success: true }
+
+    case USER.USER_PASS_RESET_FAIL:
+      return { loading: false, error: action.payload }
+
+    default:
+      return state
+  }
+}

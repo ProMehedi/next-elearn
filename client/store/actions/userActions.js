@@ -93,3 +93,25 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
     })
   }
 }
+
+export const forgotPassword = (email) => async (dispatch) => {
+  try {
+    dispatch({ type: USER.USER_PASS_RESET_REQUEST })
+
+    const config = {
+      headers: { 'Content-Type': 'application/json' },
+    }
+
+    await axios.post(`/api/users/forgot-password`, { email }, config)
+
+    dispatch({ type: USER.USER_PASS_RESET_SUCCESS })
+  } catch (error) {
+    dispatch({
+      type: USER.USER_PASS_RESET_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
