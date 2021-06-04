@@ -1,13 +1,18 @@
 import axios from 'axios'
 import * as INSTRUCTOR from '../constants/instructorConstants'
 
-export const payoutInstructor = (doc) => async (dispatch) => {
+export const payoutInstructor = (doc) => async (dispatch, getState) => {
   try {
     dispatch({ type: INSTRUCTOR.INSTRUCTOR_PAYOUT_REQUEST })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
 
     const config = {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
       },
     }
 

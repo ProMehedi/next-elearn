@@ -4,8 +4,10 @@ import colors from 'colors'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import userRoutes from './routes/userRoutes.js'
+import instructorRoutes from './routes/instructorRoutes.js'
 import connectDB from './config/db.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
+import path from 'path'
 
 // Enable .env
 dotenv.config()
@@ -30,6 +32,9 @@ const NODE_ENV = process.env.NODE_ENV
 
 // User Routes
 app.use(`${API_URL}/users`, userRoutes)
+
+// Instructor Routes
+app.use(`${API_URL}/instructor`, instructorRoutes)
 
 app.get('/', (req, res) => {
   res.send('API is running..')

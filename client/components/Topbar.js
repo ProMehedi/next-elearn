@@ -18,9 +18,7 @@ const Topbar = () => {
   const { user, loading } = userDetails
 
   useEffect(() => {
-    if (!userInfo || userInfo === null) {
-      router.push('/login')
-    } else {
+    if (userInfo) {
       if (!user.name) {
         dispatch(getUserDetails('profile'))
       }
