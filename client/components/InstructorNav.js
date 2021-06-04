@@ -7,7 +7,7 @@ const InstructorNav = () => {
     <>
       <ActiveLink href='/user'>
         <Nav.Link as='a'>
-          <HomeOutlined /> Create Course
+          <i className='fa fa-home'></i> Create Course
         </Nav.Link>
       </ActiveLink>
     </>
