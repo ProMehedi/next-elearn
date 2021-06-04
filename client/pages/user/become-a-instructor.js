@@ -1,11 +1,32 @@
-import Jumbotron from '../../components/Jumbotron'
-import { Button, Card, Col, Container, Row } from 'react-bootstrap'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
 import { BeatLoader } from 'react-spinners'
+import { Button, Card, Col, Container, Row } from 'react-bootstrap'
+import Jumbotron from '../../components/Jumbotron'
+import { payoutInstructor } from '../../store/actions/instructorActions'
 
 const BecomeInstructorPage = () => {
-  const loading = false
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const instructorPayout = useSelector((state) => state.instructorPayout)
+  const { payout, loading, error } = instructorPayout
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+
+  useEffect(() => {
+    if (!userInfo || userInfo === null) {
+      router.push('/login')
+    }
+    if (error) {
+      toast.error(error)
+    }
+  }, [router, userInfo, error])
+
   const instructorHandler = () => {
-    console.log('Become Instructor!')
+    dispatch(payoutInstructor())
   }
   return (
     <>

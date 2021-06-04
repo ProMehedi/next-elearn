@@ -2,6 +2,7 @@ import { applyMiddleware, combineReducers, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import * as USER from './reducers/userReducers'
+import * as INSTRUCTOR from './reducers/instructorReducers'
 
 const reducer = combineReducers({
   userLogin: USER.userLoginReducer,
@@ -9,6 +10,7 @@ const reducer = combineReducers({
   userDetails: USER.userDetailsReducer,
   passForgot: USER.passForgotReducer,
   passReset: USER.passResetReducer,
+  instructorPayout: INSTRUCTOR.instructorPayoutReducer,
 })
 
 const ISSERVER = typeof window === 'undefined'
