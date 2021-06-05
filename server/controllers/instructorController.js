@@ -38,3 +38,26 @@ export const payoutInstructor = asyncHandler(async (req, res) => {
     throw new Error('Invalid user data')
   }
 })
+
+// @desc    Register For Instructor
+// @route   GET /api/instructor
+// @access  Public
+export const registerInstructor = asyncHandler(async (req, res) => {
+  const { name, email, phone, bkash, address, about } = req.body
+  const user = await User.findOne({ email })
+
+  if (user) {
+    user.name = name
+    user.phone = phone
+    user.bkash = bkash
+    user.address = address
+    user.about = about
+
+    const updatedUser = await user.save()
+
+    res.json(updatedUser)
+  } else {
+    res.status(404)
+    throw new Error('User not found!')
+  }
+})

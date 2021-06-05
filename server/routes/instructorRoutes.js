@@ -1,9 +1,9 @@
 import express from 'express'
-import { payoutInstructor } from '../controllers/instructorController.js'
+import { registerInstructor } from '../controllers/instructorController.js'
 import { protect } from '../middleware/authMiddleware.js'
 const router = express.Router()
 
 // Instructor
-router.route('/').post(protect, payoutInstructor)
+router.route('/').post(protect, registerInstructor)
 
 export default router

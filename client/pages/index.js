@@ -11,9 +11,9 @@ const HomePage = () => {
   const { userInfo, loading } = userLogin
 
   useEffect(() => {
-    if (!userInfo || userInfo === null) {
-      router.push('/login')
-    }
+    // if (!userInfo || userInfo === null) {
+    //   router.push('/login')
+    // }
   }, [router, userInfo])
 
   if (loading) {

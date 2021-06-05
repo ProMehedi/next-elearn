@@ -121,7 +121,7 @@ const Topbar = () => {
                   </Nav.Link>
                 </Link>
               ) : (
-                <Link href='/user/become-a-instructor'>
+                <Link href='/user/become-instructor'>
                   <Nav.Link as='a'>
                     <Button variant='success'>
                       <i className='far fa-calendar-check'></i> Become a

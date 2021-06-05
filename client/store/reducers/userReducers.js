@@ -35,6 +35,25 @@ export const userRegisterReducer = (state = {}, action) => {
   }
 }
 
+export const userVefiryReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER.USER_VERIFY_REQUEST:
+      return { loading: true }
+
+    case USER.USER_VERIFY_SUCCESS:
+      return { loading: false, success: true }
+
+    case USER.USER_VERIFY_FAIL:
+      return { loading: false, error: action.payload }
+
+    case USER.USER_VERIFY_RESET:
+      return {}
+
+    default:
+      return state
+  }
+}
+
 export const userDetailsReducer = (state = { user: {} }, action) => {
   switch (action.type) {
     case USER.USER_DETAILS_REQUEST:

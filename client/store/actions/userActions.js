@@ -65,6 +65,35 @@ export const register = (name, email, password) => async (dispatch) => {
   }
 }
 
+export const verifyUser = (email, code) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER.USER_VERIFY_REQUEST })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    await axios.post(`/api/users/verify`, { email, code }, config)
+
+    dispatch({ type: USER.USER_VERIFY_SUCCESS })
+  } catch (error) {
+    dispatch({
+      type: USER.USER_VERIFY_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
 export const getUserDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER.USER_DETAILS_REQUEST })

@@ -6,8 +6,10 @@ import { BeatLoader, ScaleLoader } from 'react-spinners'
 import { Col, Container, Row, Card, Form, Button, Alert } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import Jumbotron from '../../components/Jumbotron'
+import { verifyUser } from '../../store/actions/userActions'
+import { USER_DETAILS_RESET } from '../../store/constants/userConstants'
 
-const RegisterPage = () => {
+const VerifyUserPage = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
@@ -21,6 +23,9 @@ const RegisterPage = () => {
   const userDetails = useSelector((state) => state.userDetails)
   const { user, error } = userDetails
 
+  const userVefiry = useSelector((state) => state.userVefiry)
+  const { loading: loadingVefiry, success, error: errorVefiry } = userVefiry
+
   useEffect(() => {
     if ((userInfo && user === 'varified') || !user.name) {
       router.push('/')
@@ -31,7 +36,15 @@ const RegisterPage = () => {
     if (error) {
       toast.error(error)
     }
-  }, [userInfo, error, user])
+    if (errorVefiry) {
+      toast.error(errorVefiry)
+    }
+    if (success) {
+      dispatch({ type: USER_DETAILS_RESET })
+      toast.success('Successfully verified!')
+      router.push('/')
+    }
+  }, [userInfo, error, errorVefiry, user, success])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -45,8 +58,12 @@ const RegisterPage = () => {
       toast.error('Email is required!')
       return false
     }
+    if (!code) {
+      toast.error('Code is required!')
+      return false
+    }
 
-    // dispatch(register(name, email, password))
+    dispatch(verifyUser(email, code))
   }
 
   if (loading) {
@@ -94,10 +111,10 @@ const RegisterPage = () => {
                   <Button
                     type='submit'
                     className='d-block w-100'
-                    disabled={loading}
+                    disabled={loadingVefiry}
                   >
                     VERIFY ACCOUNT{' '}
-                    {loading && <BeatLoader size={10} color='white' />}
+                    {loadingVefiry && <BeatLoader size={10} color='white' />}
                   </Button>
                 </Form>
               </Card.Body>
@@ -112,4 +129,4 @@ const RegisterPage = () => {
   )
 }
 
-export default RegisterPage
+export default VerifyUserPage

@@ -7,6 +7,7 @@ import * as INSTRUCTOR from './reducers/instructorReducers'
 const reducer = combineReducers({
   userLogin: USER.userLoginReducer,
   userRegister: USER.userRegisterReducer,
+  userVefiry: USER.userVefiryReducer,
   userDetails: USER.userDetailsReducer,
   passForgot: USER.passForgotReducer,
   passReset: USER.passResetReducer,
