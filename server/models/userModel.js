@@ -12,10 +12,12 @@ const userSchema = mongoose.Schema(
       default: ['Subscriber'],
       enum: ['Subscriber', 'Instructor', 'Admin'],
     },
+    account_status: { type: String, default: 'unvarified' },
     stripe_account_id: '',
     stripe_seller: {},
     stripeSession: {},
     passwordResetCode: { type: String, default: '' },
+    verificationCode: { type: String, default: '' },
   },
   {
     timestamps: true,

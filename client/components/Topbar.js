@@ -1,6 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
 import Link from 'next/link'
-import { Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import {
+  Alert,
+  Button,
+  Container,
+  Nav,
+  Navbar,
+  NavDropdown,
+} from 'react-bootstrap'
 import ActiveLink from './ActiveLink'
 import { getUserDetails, logout } from '../store/actions/userActions'
 import PageLoader from './PageLoader'
@@ -33,9 +40,27 @@ const Topbar = () => {
     return <PageLoader />
   }
 
+  const marginTop = userInfo && user.account_status !== 'verified' ? 35 : 0
+
   return (
     <>
+      {userInfo && user.account_status !== 'verified' && (
+        <Navbar
+          fixed='top'
+          bg='warning'
+          className='align-items-center justify-content-center'
+        >
+          <div>
+            <h6 className='m-0'>
+              Your account is not verified! Plz..{' '}
+              <Link href='/user/verify'>Verify your account!</Link>
+            </h6>
+          </div>
+        </Navbar>
+      )}
+
       <Navbar
+        style={{ top: `${marginTop}px` }}
         expand='lg'
         fixed='top'
         bg='white'
@@ -109,7 +134,7 @@ const Topbar = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <div style={{ minHeight: '63px' }}></div>
+      <div style={{ minHeight: `${63 + marginTop}px` }}></div>
     </>
   )
 }

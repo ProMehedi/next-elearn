@@ -5,6 +5,8 @@ import {
   registerUser,
   forgotPassword,
   resetPassword,
+  sendVerificationCode,
+  verifyUser,
 } from '../controllers/userController.js'
 import { protect } from '../middleware/authMiddleware.js'
 const router = express.Router()
@@ -21,5 +23,9 @@ router.route('/profile').get(protect, getUserProfile)
 // Password Reset
 router.route('/forgot-password').post(forgotPassword)
 router.route('/reset-password').post(resetPassword)
+
+// Account Varification
+router.route('/send-varification').post(sendVerificationCode)
+router.route('/verify').post(protect, verifyUser)
 
 export default router

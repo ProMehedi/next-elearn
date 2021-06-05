@@ -4,6 +4,8 @@ import { nanoid } from 'nanoid'
 import asyncHandler from 'express-async-handler'
 import User from '../models/userModel.js'
 import generateToken from '../utils/genarateToken.js'
+import sendEmail from '../utils/sendMail.js'
+import nodemailer from 'nodemailer'
 
 const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -147,5 +149,55 @@ export const resetPassword = asyncHandler(async (req, res) => {
   } else {
     res.status(500)
     throw new Error('Something went wrong!')
+  }
+})
+
+// @desc    Verify User
+// @route   POST /api/users/send-varification
+// @access  Public
+export const sendVerificationCode = asyncHandler(async (req, res) => {
+  const randomCode = nanoid(6).toUpperCase()
+  const { email } = req.body
+
+  const user = await User.findOneAndUpdate(
+    { email },
+    { verificationCode: randomCode }
+  )
+  if (user) {
+    try {
+      await sendEmail(email, randomCode)
+      res.status(201).json({ success: true })
+    } catch (error) {
+      res.status(500)
+      throw new Error(error)
+    }
+  } else {
+    res.status(500)
+    throw new Error(`User not found with email ${email}!`)
+  }
+})
+
+// @desc    Verify User
+// @route   POST /api/users/verify
+// @access  Private
+export const verifyUser = asyncHandler(async (req, res) => {
+  const { email, code } = req.body
+
+  const status = await User.findOne({ email })
+  if (status.account_status !== 'verified') {
+    const user = await User.findOneAndUpdate(
+      { email, verificationCode: code },
+      { account_status: 'verified', verificationCode: '' }
+    )
+
+    if (user) {
+      res.status(201).json({ success: true })
+    } else {
+      res.status(500)
+      throw new Error('Something went wrong!')
+    }
+  } else {
+    res.status(500)
+    throw new Error('This account is already verified!')
   }
 })

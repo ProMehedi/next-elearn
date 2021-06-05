@@ -43,10 +43,11 @@ const ForgotPassPage = () => {
       }
       if (successReset) {
         router.push('/login')
+        toast.success('Password reset successfully!')
         dispatch({ type: USER_PASS_RESET_RESET })
       }
     }
-  }, [userInfo, error, errorReset])
+  }, [userInfo, error, successReset, errorReset])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -86,7 +87,6 @@ const ForgotPassPage = () => {
     }
 
     dispatch(resetPassword(email, code, password))
-    console.log('Rest Password!')
   }
 
   if (loading) {
