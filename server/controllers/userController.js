@@ -1,19 +1,10 @@
-import AWS from 'aws-sdk'
 import bcrypt from 'bcryptjs'
 import { nanoid } from 'nanoid'
 import asyncHandler from 'express-async-handler'
 import User from '../models/userModel.js'
 import generateToken from '../utils/genarateToken.js'
 import sendEmail from '../utils/sendMail.js'
-import nodemailer from 'nodemailer'
-
-const awsConfig = {
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1',
-  apiVersion: process.env.AWS_API_VERSION,
-}
-const SES = new AWS.SES(awsConfig)
+import sendResetMail from '../utils/sendResetMail.js'
 
 // @desc    Register New User
 // @route   GET /api/users
@@ -91,42 +82,18 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     { passwordResetCode: randomCode }
   )
 
-  if (!user) {
+  if (user) {
+    try {
+      await sendResetMail(email, randomCode)
+      res.status(201).json({ success: true })
+    } catch (error) {
+      res.status(500)
+      throw new Error(error)
+    }
+  } else {
     res
       .status(400)
       .send({ message: `User not found with this email: ${email}` })
-  } else {
-    const params = {
-      Source: process.env.EMAIL_FROM,
-      Destination: {
-        ToAddresses: [email],
-      },
-      ReplyToAddresses: [process.env.EMAIL_FROM],
-      Message: {
-        Body: {
-          Html: {
-            Charset: 'utf8',
-            Data: `<html>
-              <h2>Reset Password</h2>
-              <p>Please use this code ${randomCode} to reset your password</p>
-            </html>`,
-          },
-        },
-        Subject: {
-          Charset: 'utf8',
-          Data: `Password reset code for promehedi.com`,
-        },
-      },
-    }
-
-    const data = await SES.sendEmail(params).promise()
-
-    if (data) {
-      res.status(201).json({ success: true })
-    } else {
-      res.status(500)
-      throw new Error('Something went wrong!')
-    }
   }
 })
 
