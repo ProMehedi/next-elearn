@@ -6,6 +6,9 @@ import { BeatLoader, ScaleLoader } from 'react-spinners'
 import { Col, Container, Row, Card, Form, Button, Alert } from 'react-bootstrap'
 import Jumbotron from '../../components/Jumbotron'
 import { toast } from 'react-toastify'
+import { registerInstructor } from '../../store/actions/instructorActions'
+import { INSTRUCTOR_REGISTER_RESET } from '../../store/constants/instructorConstants'
+import { USER_DETAILS_RESET } from '../../store/constants/userConstants'
 
 const BecomeInstructorPage = () => {
   const [name, setName] = useState('')
@@ -18,8 +21,8 @@ const BecomeInstructorPage = () => {
   const dispatch = useDispatch()
   const router = useRouter()
 
-  const userRegister = useSelector((state) => state.userRegister)
-  const { loading: loadingRegister, error } = userRegister
+  const instructorRegister = useSelector((state) => state.instructorRegister)
+  const { loading: loadingRegister, error, success } = instructorRegister
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo, loading } = userLogin
@@ -28,7 +31,7 @@ const BecomeInstructorPage = () => {
   const { user } = userDetails
 
   useEffect(() => {
-    if (userInfo && user.role === 'Instructor') {
+    if (user.role && user.role[0] === 'Instructor') {
       router.push('/')
     } else {
       if (user) {
@@ -36,11 +39,18 @@ const BecomeInstructorPage = () => {
         setEmail(user.email)
       }
 
+      if (success) {
+        dispatch({ type: INSTRUCTOR_REGISTER_RESET })
+        dispatch({ type: USER_DETAILS_RESET })
+        toast.success('Great! You are Instructor now!!')
+        router.push('/')
+      }
+
       if (error) {
         toast.error(error)
       }
     }
-  }, [userInfo, error, user])
+  }, [userInfo, error, user, success])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -63,7 +73,7 @@ const BecomeInstructorPage = () => {
       return false
     }
 
-    // dispatch(register(name, email, password))
+    dispatch(registerInstructor(name, email, phone, bkash, address, about))
   }
 
   if (loading) {
@@ -180,7 +190,7 @@ const BecomeInstructorPage = () => {
                     className='d-block w-100'
                     disabled={loadingRegister}
                   >
-                    REGISTER{' '}
+                    BECOME INSTRUCTOR{' '}
                     {loadingRegister && <BeatLoader size={10} color='white' />}
                   </Button>
                 </Form>

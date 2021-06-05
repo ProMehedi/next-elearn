@@ -12,6 +12,7 @@ const reducer = combineReducers({
   passForgot: USER.passForgotReducer,
   passReset: USER.passResetReducer,
   instructorPayout: INSTRUCTOR.instructorPayoutReducer,
+  instructorRegister: INSTRUCTOR.instructorRegisterReducer,
 })
 
 const ISSERVER = typeof window === 'undefined'

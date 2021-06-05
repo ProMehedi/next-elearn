@@ -52,6 +52,7 @@ export const registerInstructor = asyncHandler(async (req, res) => {
     user.bkash = bkash
     user.address = address
     user.about = about
+    user.role = 'Instructor'
 
     const updatedUser = await user.save()
 
