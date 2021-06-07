@@ -31,6 +31,9 @@ const BecomeInstructorPage = () => {
   const { user } = userDetails
 
   useEffect(() => {
+    if (!userInfo || userInfo === null) {
+      router.push('/login')
+    }
     if (user.role && user.role[0] === 'Instructor') {
       router.push('/')
     } else {

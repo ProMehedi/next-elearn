@@ -1,16 +1,34 @@
-import { useState } from 'react'
-import { Button, Card, Col, Container, Form, Image, Row } from 'react-bootstrap'
+import { useEffect, useState } from 'react'
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Image,
+  InputGroup,
+  Row,
+} from 'react-bootstrap'
 import Jumbotron from '../../../components/Jumbotron'
 import LeftNav from '../../../components/LeftNav'
 import TextEditor from '../../../components/TextEditor'
 import ReactPlayer from 'react-player/lazy'
+import CustomCard from '../../../components/CustomCard'
 
 const CreateCoursePage = () => {
   const [title, setTitle] = useState('')
   const [shortDesc, setShortDesc] = useState('')
   const [desc, setDesc] = useState('')
-  const [imgUrl, setImgUrl] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
+  const [price, setPrice] = useState(9.99)
+  const [priceStatus, setPriceStatus] = useState(false)
+  const [category, setCategory] = useState('')
+  const [duration, setDuration] = useState('')
+  const [imgUrl, setImgUrl] = useState('')
+
+  useEffect(() => {
+    console.log(priceStatus)
+  }, [priceStatus])
 
   const uploadImageHandler = (e) => {
     let file = e.target.files[0]
@@ -52,102 +70,172 @@ const CreateCoursePage = () => {
               </Row>
               <Row>
                 <Col md={8}>
-                  <Card>
-                    <Card.Body>
-                      <Card.Title className='border-bottom pb-3 mb-3'>
-                        Basic Information
-                      </Card.Title>
-                      <Form>
-                        <Form.Group className='mb-3' controlId='title'>
-                          <Form.Label>Course Title</Form.Label>
-                          <Form.Control
-                            placeholder='Enter Title'
-                            type='text'
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                          />
-                        </Form.Group>
-                        <Form.Group className='mb-3' controlId='desc'>
-                          <Form.Label>Course Description</Form.Label>
-                          <TextEditor desc={desc} setDesc={setDesc} />
-                        </Form.Group>
-                        <Form.Group className='mb-3' controlId='shortDesc'>
-                          <Form.Label>Course Short Description</Form.Label>
-                          <Form.Control
-                            as='textarea'
-                            rows={3}
-                            placeholder='Write About Your Course'
-                            value={shortDesc}
-                            onChange={(e) => setShortDesc(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Form>
-                    </Card.Body>
-                  </Card>
+                  <CustomCard title='Basic Information' classes='mb-3'>
+                    <Form.Group className='mb-3' controlId='title'>
+                      <Form.Label>Course Title</Form.Label>
+                      <Form.Control
+                        placeholder='Enter Title'
+                        type='text'
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Form.Group className='mb-3' controlId='desc'>
+                      <Form.Label>Course Description</Form.Label>
+                      <TextEditor desc={desc} setDesc={setDesc} />
+                    </Form.Group>
+                    <Form.Group className='mb-3' controlId='shortDesc'>
+                      <Form.Label>Course Short Description</Form.Label>
+                      <Form.Control
+                        as='textarea'
+                        rows={3}
+                        placeholder='Write About Your Course'
+                        value={shortDesc}
+                        onChange={(e) => setShortDesc(e.target.value)}
+                      />
+                    </Form.Group>
+                  </CustomCard>
+
+                  <CustomCard title='Lessons' classes='mb-3'>
+                    <Form.Group className='mb-3' controlId='title'>
+                      <Form.Label>Course Title</Form.Label>
+                      <Form.Control
+                        placeholder='Enter Title'
+                        type='text'
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                    </Form.Group>
+                  </CustomCard>
                 </Col>
                 <Col md={4}>
+                  <CustomCard title='Preview Video' classes='mb-3'>
+                    <Form.Group className='mb-3'>
+                      {videoUrl && (
+                        <ReactPlayer
+                          controls
+                          width='100%'
+                          height='100%'
+                          url={videoUrl}
+                        />
+                      )}
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label>Video URL</Form.Label>
+                      <Form.Control
+                        placeholder='Enter Video URL'
+                        type='text'
+                        value={videoUrl}
+                        onChange={(e) => setVideoUrl(e.target.value)}
+                      />
+                    </Form.Group>
+                  </CustomCard>
+
                   <Card className='mb-3'>
                     <Card.Body>
-                      <Card.Title className='border-bottom pb-3 mb-3'>
-                        Preview Video
+                      <Card.Title
+                        className={
+                          priceStatus ? 'mb-0' : 'border-bottom pb-3 mb-3'
+                        }
+                      >
+                        <Row className='align-items-center'>
+                          <Col>Couse Price</Col>
+                          <Col>
+                            <div className='onoffswitch ms-auto'>
+                              <input
+                                type='checkbox'
+                                name='onoffswitch'
+                                className='onoffswitch-checkbox'
+                                id='myonoffswitch'
+                                tabIndex='1'
+                                checked={priceStatus}
+                                onChange={(e) =>
+                                  setPriceStatus(e.target.checked)
+                                }
+                              />
+                              <label
+                                className='onoffswitch-label'
+                                htmlFor='myonoffswitch'
+                              >
+                                <span className='onoffswitch-inner'></span>
+                                <span className='onoffswitch-switch'></span>
+                              </label>
+                            </div>
+                          </Col>
+                        </Row>
                       </Card.Title>
-                      <Form.Group class='mb-3'>
-                        {videoUrl && (
-                          <ReactPlayer
-                            controls
-                            width='100%'
-                            height='100%'
-                            url={videoUrl}
+                      {!priceStatus && (
+                        <InputGroup>
+                          <InputGroup.Text>Price ( $ )</InputGroup.Text>
+                          <Form.Control
+                            placeholder='Enter Course Price'
+                            type='number'
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            min={9.99}
                           />
-                        )}
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Label>Video URL</Form.Label>
-                        <Form.Control
-                          placeholder='Enter Video URL'
-                          type='text'
-                          value={videoUrl}
-                          onChange={(e) => setVideoUrl(e.target.value)}
-                        />
-                      </Form.Group>
+                        </InputGroup>
+                      )}
                     </Card.Body>
                   </Card>
-                  <Card className='mb-3'>
-                    <Card.Body>
-                      <Card.Title className='border-bottom pb-3 mb-3'>
-                        Featured Image
-                      </Card.Title>
-                      <Form.Group class='mb-3'>
-                        <div class='customFileUpload mb-1 border rounded'>
-                          <img id='image' src={imgUrl} />
-                          <div
-                            class='customFileUploadBtn'
-                            onClick={fileInputHandler}
-                          >
-                            <button type='button'>
-                              <i className='fa fa-cloud-upload-alt'></i>
-                            </button>
-                          </div>
+
+                  <CustomCard title='Course Meta' classes='mb-3'>
+                    <Form.Group className='mb-3'>
+                      <Form.Label>Category</Form.Label>
+                      <Form.Control
+                        className='form-select'
+                        as='select'
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                      >
+                        <option value=''>--- SELECT CATEGORY ---</option>
+                        <option value='cat1'>Category 1</option>
+                        <option value='cat2'>Category 2</option>
+                        <option value='cat3'>Category 3</option>
+                      </Form.Control>
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label>Duration</Form.Label>
+                      <Form.Control
+                        placeholder='Total Course Duration'
+                        type='text'
+                        value={duration}
+                        onChange={(e) => setDuration(e.target.value)}
+                      />
+                    </Form.Group>
+                  </CustomCard>
+
+                  <CustomCard title='Featured Image' classes='mb-3'>
+                    <Form.Group className='mb-3'>
+                      <div className='customFileUpload mb-1 border rounded'>
+                        <img id='image' src={imgUrl} />
+                        <div
+                          className='customFileUploadBtn'
+                          onClick={fileInputHandler}
+                        >
+                          <button type='button'>
+                            <i className='fa fa-cloud-upload-alt'></i>
+                          </button>
                         </div>
-                        <input
-                          name='photo'
-                          id='fileInput'
-                          accept='image/*'
-                          type='file'
-                          onChange={uploadImageHandler}
-                        />
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Label>Image URL</Form.Label>
-                        <Form.Control
-                          placeholder='Enter Image URL'
-                          type='text'
-                          value={imgUrl}
-                          onChange={(e) => setImgUrl(e.target.value)}
-                        />
-                      </Form.Group>
-                    </Card.Body>
-                  </Card>
+                      </div>
+                      <input
+                        name='photo'
+                        id='fileInput'
+                        accept='image/*'
+                        type='file'
+                        onChange={uploadImageHandler}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label>Image URL</Form.Label>
+                      <Form.Control
+                        placeholder='Enter Image URL'
+                        type='text'
+                        value={imgUrl}
+                        onChange={(e) => setImgUrl(e.target.value)}
+                      />
+                    </Form.Group>
+                  </CustomCard>
                 </Col>
               </Row>
             </Container>

@@ -1,3 +1,22 @@
+::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
 body {
   background: #f9f9f9;
 }
@@ -107,6 +126,13 @@ img {
   position: relative;
   background: #e2e8f0;
   min-height: 220px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.customFileUpload img {
+  width: 100%;
 }
 
 .customFileUploadBtn {
@@ -138,4 +164,74 @@ img {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+/* Custom Swithcer */
+/*  Toggle switch css */
+.onoffswitch {
+  position: relative;
+  width: 90px;
+}
+.onoffswitch-checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.onoffswitch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #999999;
+  border-radius: 30px;
+}
+.onoffswitch-inner {
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before,
+.onoffswitch-inner:after {
+  display: block;
+  float: left;
+  width: 50%;
+  height: 35px;
+  padding: 0;
+  line-height: 35px;
+  font-size: 15px;
+  color: white;
+  font-family: Trebuchet, Arial, sans-serif;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+  content: 'FREE';
+  padding-left: 10px;
+  background-color: #34a7c1;
+  color: #ffffff;
+}
+.onoffswitch-inner:after {
+  content: 'PAID';
+  padding-right: 10px;
+  background-color: #f15b43;
+  color: #fff;
+  text-align: right;
+}
+.onoffswitch-switch {
+  width: 32px;
+  background: #ffffff;
+  position: absolute;
+  right: 56px;
+  border: 2px solid #999999;
+  border-radius: 30px;
+  transition: all 0.3s ease-in 0s;
+  height: 32px;
+  top: calc(50% + -1px);
+  transform: translateY(-50%);
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+  margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+  right: 2px;
 }

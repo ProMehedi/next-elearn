@@ -2,11 +2,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { BeatLoader, ScaleLoader } from 'react-spinners'
+import { BeatLoader } from 'react-spinners'
 import { Col, Container, Row, Card, Form, Button } from 'react-bootstrap'
 import Jumbotron from '../components/Jumbotron'
 import { toast } from 'react-toastify'
 import { login } from '../store/actions/userActions'
+import PageLoader from '../components/PageLoader'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -44,7 +45,7 @@ const LoginPage = () => {
   }
 
   if (loading) {
-    return <ScaleLoader size={50} />
+    return <PageLoader />
   }
 
   return (
