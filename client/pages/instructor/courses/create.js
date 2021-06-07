@@ -14,6 +14,7 @@ import LeftNav from '../../../components/LeftNav'
 import TextEditor from '../../../components/TextEditor'
 import ReactPlayer from 'react-player/lazy'
 import CustomCard from '../../../components/CustomCard'
+import CustomInput from '../../../components/CustomInput'
 
 const CreateCoursePage = () => {
   const [title, setTitle] = useState('')
@@ -71,15 +72,12 @@ const CreateCoursePage = () => {
               <Row>
                 <Col md={8}>
                   <CustomCard title='Basic Information' classes='mb-3'>
-                    <Form.Group className='mb-3' controlId='title'>
-                      <Form.Label>Course Title</Form.Label>
-                      <Form.Control
-                        placeholder='Enter Title'
-                        type='text'
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                      />
-                    </Form.Group>
+                    <CustomInput
+                      label='Course Title'
+                      placeholder='Enter Title'
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                    />
                     <Form.Group className='mb-3' controlId='desc'>
                       <Form.Label>Course Description</Form.Label>
                       <TextEditor desc={desc} setDesc={setDesc} />
@@ -97,15 +95,12 @@ const CreateCoursePage = () => {
                   </CustomCard>
 
                   <CustomCard title='Lessons' classes='mb-3'>
-                    <Form.Group className='mb-3' controlId='title'>
-                      <Form.Label>Course Title</Form.Label>
-                      <Form.Control
-                        placeholder='Enter Title'
-                        type='text'
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                      />
-                    </Form.Group>
+                    <CustomInput
+                      label='Course Title'
+                      placeholder='Enter Title'
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                    />
                   </CustomCard>
                 </Col>
                 <Col md={4}>
@@ -120,15 +115,13 @@ const CreateCoursePage = () => {
                         />
                       )}
                     </Form.Group>
-                    <Form.Group>
-                      <Form.Label>Video URL</Form.Label>
-                      <Form.Control
-                        placeholder='Enter Video URL'
-                        type='text'
-                        value={videoUrl}
-                        onChange={(e) => setVideoUrl(e.target.value)}
-                      />
-                    </Form.Group>
+                    <CustomInput
+                      classes='mb-0'
+                      label='Video URL'
+                      placeholder='Enter Video URL'
+                      value={videoUrl}
+                      onChange={(e) => setVideoUrl(e.target.value)}
+                    />
                   </CustomCard>
 
                   <Card className='mb-3'>
@@ -194,15 +187,14 @@ const CreateCoursePage = () => {
                         <option value='cat3'>Category 3</option>
                       </Form.Control>
                     </Form.Group>
-                    <Form.Group>
-                      <Form.Label>Duration</Form.Label>
-                      <Form.Control
-                        placeholder='Total Course Duration'
-                        type='text'
-                        value={duration}
-                        onChange={(e) => setDuration(e.target.value)}
-                      />
-                    </Form.Group>
+                    <CustomInput
+                      classes='mb-0'
+                      type='number'
+                      label='Duration (00:00:00)'
+                      placeholder='Total Course Duration'
+                      value={duration}
+                      onChange={(e) => setDuration(e.target.value)}
+                    />
                   </CustomCard>
 
                   <CustomCard title='Featured Image' classes='mb-3'>
@@ -226,15 +218,13 @@ const CreateCoursePage = () => {
                         onChange={uploadImageHandler}
                       />
                     </Form.Group>
-                    <Form.Group>
-                      <Form.Label>Image URL</Form.Label>
-                      <Form.Control
-                        placeholder='Enter Image URL'
-                        type='text'
-                        value={imgUrl}
-                        onChange={(e) => setImgUrl(e.target.value)}
-                      />
-                    </Form.Group>
+                    <CustomInput
+                      classes='mb-0'
+                      label='Image URL'
+                      placeholder='Enter Image URL'
+                      value={imgUrl}
+                      onChange={(e) => setImgUrl(e.target.value)}
+                    />
                   </CustomCard>
                 </Col>
               </Row>
