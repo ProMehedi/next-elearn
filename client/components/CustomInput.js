@@ -33,7 +33,7 @@ CustomInput.defaultProps = {
 CustomInput.propTypes = {
   classes: PropTypes.string,
   type: PropTypes.string,
-  onChange: PropTypes.function,
+  onChange: PropTypes.func,
 }
 
 export default CustomInput

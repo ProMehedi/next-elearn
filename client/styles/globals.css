@@ -167,7 +167,6 @@ img {
 }
 
 /* Custom Swithcer */
-/*  Toggle switch css */
 .onoffswitch {
   position: relative;
   width: 90px;
@@ -234,4 +233,80 @@ img {
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
   right: 2px;
+}
+
+/* Dragable Component */
+.nestableListWrapper {
+  overflow: hidden;
+}
+
+.nestableList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nestableList li {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 60px;
+  border-radius: 3px;
+}
+
+.nestableList li + li {
+  margin-top: 0.5em;
+}
+
+.nestableHandle {
+  width: 50px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #f1f1f1;
+  background: #f9f9f9;
+  transition: all 0.2s;
+}
+
+.nestableContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border: 1px solid #f1f1f1;
+  border-radius: 3px;
+  width: 100%;
+}
+
+.nestableContentAction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nestableHandle:hover {
+  background: #f1f1f1;
+}
+
+.lessonImg {
+  width: 90px;
+  height: 100%;
+  overflow: hidden;
+  background: #e2e8f0;
+  z-index: 9;
+  position: absolute;
+  left: 0;
+  border-radius: 3px;
+}
+
+.nestableContentInner {
+  width: 100%;
+  padding-left: 100px;
+  position: relative;
+  min-height: 60px;
 }
