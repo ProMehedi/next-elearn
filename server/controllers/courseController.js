@@ -1,4 +1,3 @@
-import slugify from 'slugify'
 import asyncHandler from 'express-async-handler'
 import Course from '../models/courseModel.js'
 
@@ -7,7 +6,7 @@ import Course from '../models/courseModel.js'
 // @access  Puclic
 export const createCourse = asyncHandler(async (req, res) => {
   const alreadyExists = await Course.findOne({
-    slug: slugify(req.body.name.toLowerCase()),
+    slug: req.body.slug,
   })
 
   if (alreadyExists) {
@@ -16,7 +15,6 @@ export const createCourse = asyncHandler(async (req, res) => {
   }
 
   const course = await Course.create({
-    slug: slugify(req.body.name.toLowerCase()),
     instructor: req.user._id,
     ...req.body,
   })

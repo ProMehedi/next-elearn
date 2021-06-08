@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as COURSE from '../constants/courseConstants'
 
-export const createCourse = (course) => async (dispatch) => {
+export const createCourse = (course) => async (dispatch, getState) => {
   try {
     dispatch({ type: COURSE.COURSE_CREATE_REQUEST })
 

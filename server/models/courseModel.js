@@ -33,7 +33,7 @@ const courseSchema = mongoose.Schema(
     desc: { type: {}, minlength: 200, required: true },
     short_desc: { type: String },
     price: { type: Number },
-    duration: { type: Number, default: 0.0 },
+    duration: { type: String, default: '00:00:00' },
     video: { type: String },
     thumb: { type: String },
     category: { type: String },
