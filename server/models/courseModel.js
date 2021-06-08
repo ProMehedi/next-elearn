@@ -1,12 +1,11 @@
 import mongoose from 'mongoose'
-import lessonSchema from './lessonSchema.js'
 
 const lessonSchema = mongoose.Schema(
   {
     title: {
       type: String,
       trim: true,
-      minlength: 10,
+      minlength: 5,
       maxlength: 255,
       required: true,
     },
@@ -26,7 +25,7 @@ const courseSchema = mongoose.Schema(
     name: {
       type: String,
       trim: true,
-      minlength: 10,
+      minlength: 5,
       maxlength: 255,
       required: true,
     },
