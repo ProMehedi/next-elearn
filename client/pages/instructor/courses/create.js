@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import slugify from 'slugify'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { BeatLoader } from 'react-spinners'
+import ReactPlayer from 'react-player/lazy'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import {
   Button,
@@ -13,13 +17,9 @@ import {
 import Jumbotron from '../../../components/Jumbotron'
 import LeftNav from '../../../components/LeftNav'
 import TextEditor from '../../../components/TextEditor'
-import ReactPlayer from 'react-player/lazy'
 import CustomCard from '../../../components/CustomCard'
 import CustomInput from '../../../components/CustomInput'
 import { createCourse } from '../../../store/actions/couseActions'
-import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
-import { BeatLoader } from 'react-spinners'
 import { COURSE_CREATE_RESET } from '../../../store/constants/courseConstants'
 
 const CreateCoursePage = () => {
@@ -306,6 +306,29 @@ const CreateCoursePage = () => {
 
   const submitHandler = (e) => {
     e.preventDefault()
+
+    // Validations
+    if (!name) {
+      toast.error('Name is required!')
+      return false
+    }
+    if (name.length < 5) {
+      toast.error('Minimum 5 characters required for Name!')
+      return false
+    }
+    if (!videoUrl) {
+      toast.error('Video URL is required!')
+      return false
+    }
+    if (!category) {
+      toast.error('Category is required!')
+      return false
+    }
+    if (!imgUrl) {
+      toast.error('Image is required!')
+      return false
+    }
+
     const createdCourse = {
       name,
       slug: slug ? slug : slugify(name.toLowerCase()),
