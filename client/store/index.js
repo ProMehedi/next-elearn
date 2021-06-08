@@ -3,6 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import * as USER from './reducers/userReducers'
 import * as INSTRUCTOR from './reducers/instructorReducers'
+import * as COURSE from './reducers/courseReducers'
 
 const reducer = combineReducers({
   userLogin: USER.userLoginReducer,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   passReset: USER.passResetReducer,
   instructorPayout: INSTRUCTOR.instructorPayoutReducer,
   instructorRegister: INSTRUCTOR.instructorRegisterReducer,
+  courseCreate: COURSE.courseCreateReducer,
 })
 
 const ISSERVER = typeof window === 'undefined'

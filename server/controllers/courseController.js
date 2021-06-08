@@ -25,6 +25,6 @@ export const createCourse = asyncHandler(async (req, res) => {
     res.send(course)
   } else {
     res.status(401)
-    throw new Error('Invalid email or password')
+    throw new Error('Cannot create course!')
   }
 })
