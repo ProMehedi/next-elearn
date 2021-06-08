@@ -19,18 +19,19 @@ import CustomInput from '../../../components/CustomInput'
 
 const CreateCoursePage = () => {
   const [title, setTitle] = useState('')
-  const [shortDesc, setShortDesc] = useState('')
+  const [slug, setSlug] = useState('')
   const [desc, setDesc] = useState('')
+  const [shortDesc, setShortDesc] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
   const [price, setPrice] = useState(9.99)
-  const [priceStatus, setPriceStatus] = useState(false)
+  const [paid, setPaid] = useState(false)
   const [category, setCategory] = useState('')
   const [duration, setDuration] = useState('')
   const [imgUrl, setImgUrl] = useState('')
 
   useEffect(() => {
-    console.log(priceStatus)
-  }, [priceStatus])
+    console.log(paid)
+  }, [paid])
 
   const uploadImageHandler = (e) => {
     let file = e.target.files[0]
@@ -401,7 +402,7 @@ const CreateCoursePage = () => {
                                               variant='danger'
                                               className='ms-2'
                                             >
-                                              <i className='fa fa-trash'></i>
+                                              <i className='far fa-trash-alt'></i>
                                             </Button>
                                           </div>
                                         </div>
@@ -442,9 +443,7 @@ const CreateCoursePage = () => {
                   <Card className='mb-3'>
                     <Card.Body>
                       <Card.Title
-                        className={
-                          priceStatus ? 'mb-0' : 'border-bottom pb-3 mb-3'
-                        }
+                        className={paid ? 'mb-0' : 'border-bottom pb-3 mb-3'}
                       >
                         <Row className='align-items-center'>
                           <Col>Couse Price</Col>
@@ -456,10 +455,8 @@ const CreateCoursePage = () => {
                                 className='onoffswitch-checkbox'
                                 id='myonoffswitch'
                                 tabIndex='1'
-                                checked={priceStatus}
-                                onChange={(e) =>
-                                  setPriceStatus(e.target.checked)
-                                }
+                                checked={paid}
+                                onChange={(e) => setPaid(e.target.checked)}
                               />
                               <label
                                 className='onoffswitch-label'
@@ -472,7 +469,7 @@ const CreateCoursePage = () => {
                           </Col>
                         </Row>
                       </Card.Title>
-                      {!priceStatus && (
+                      {!paid && (
                         <InputGroup>
                           <InputGroup.Text>Price ( $ )</InputGroup.Text>
                           <Form.Control
