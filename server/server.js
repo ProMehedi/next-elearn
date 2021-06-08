@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import dotenv from 'dotenv'
 import userRoutes from './routes/userRoutes.js'
 import instructorRoutes from './routes/instructorRoutes.js'
+import courseRoutes from './routes/courseRoutes.js'
 import connectDB from './config/db.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 import path from 'path'
@@ -35,6 +36,9 @@ app.use(`${API_URL}/users`, userRoutes)
 
 // Instructor Routes
 app.use(`${API_URL}/instructor`, instructorRoutes)
+
+// Courses Routes
+app.use(`${API_URL}/courses`, courseRoutes)
 
 app.get('/', (req, res) => {
   res.send('API is running..')

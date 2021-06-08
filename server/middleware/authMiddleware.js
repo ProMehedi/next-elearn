@@ -36,3 +36,12 @@ export const admin = asyncHandler(async (req, res, next) => {
     throw new Error('Not authorized as an Admin!')
   }
 })
+
+export const instructor = asyncHandler(async (req, res, next) => {
+  if (req.user && req.user.role.includes('Instructor')) {
+    next()
+  } else {
+    res.status(401)
+    throw new Error('Not authorized as an Instructor!')
+  }
+})
