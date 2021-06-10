@@ -15,6 +15,7 @@ const reducer = combineReducers({
   instructorPayout: INSTRUCTOR.instructorPayoutReducer,
   instructorRegister: INSTRUCTOR.instructorRegisterReducer,
   courseCreate: COURSE.courseCreateReducer,
+  courseDetails: COURSE.courseDetailsReducer,
 })
 
 const ISSERVER = typeof window === 'undefined'

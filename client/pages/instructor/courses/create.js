@@ -7,7 +7,7 @@ import Jumbotron from '../../../components/Jumbotron'
 import LeftNav from '../../../components/LeftNav'
 import { COURSE_CREATE_RESET } from '../../../store/constants/courseConstants'
 import CourseForm from '../../../components/forms/CourseForm'
-import { createCourse } from '../../../store/actions/couseActions'
+import { createCourse } from '../../../store/actions/courseActions'
 
 const CreateCoursePage = () => {
   const [course, setCourse] = useState({

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
@@ -5,11 +6,11 @@ import { BeatLoader } from 'react-spinners'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import Jumbotron from '../../../components/Jumbotron'
 import LeftNav from '../../../components/LeftNav'
-import { COURSE_CREATE_RESET } from '../../../store/constants/courseConstants'
 import CourseForm from '../../../components/forms/CourseForm'
-import { createCourse } from '../../../store/actions/couseActions'
+import { detailsCourse } from '../../../store/actions/courseActions'
 
 const CreateCoursePage = () => {
+  const [slug, setSlug] = useState('')
   const [course, setCourse] = useState({
     name: '',
     slug: '',
@@ -25,19 +26,38 @@ const CreateCoursePage = () => {
   })
 
   const dispatch = useDispatch()
+  const router = useRouter()
 
-  const courseCreate = useSelector((state) => state.courseCreate)
-  const { loading, success, error } = courseCreate
+  const courseDetails = useSelector((state) => state.courseDetails)
+  const { loading, course: courseData } = courseDetails
+
+  const courseUpdate = useSelector((state) => state.courseUpdate)
+  const { loading: loadingUpdate, success, error } = courseUpdate
 
   useEffect(() => {
-    if (success) {
-      toast.success('Course Created Successfully!')
-      dispatch({ type: COURSE_CREATE_RESET })
+    if (!router.isReady) return false
+    setSlug(router.query.slug)
+    if (!courseData) {
+      dispatch(detailsCourse(slug))
+    }
+    if (courseData) {
+      setCourse({
+        ...course,
+        name: courseData.name,
+        slug: courseData.slug,
+        desc: courseData.desc,
+        shortDesc: courseData.short_desc,
+        videoUrl: courseData.video,
+        imgUrl: courseData.thumb,
+        price: courseData.price,
+        category: courseData.category,
+        duration: courseData.duration,
+      })
     }
     if (error) {
       toast.error(error)
     }
-  }, [success, error])
+  }, [error, router, courseData])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -65,7 +85,10 @@ const CreateCoursePage = () => {
     }
 
     console.log(course)
-    dispatch(createCourse(course))
+  }
+
+  if (loading) {
+    return <PageLoader />
   }
 
   return (

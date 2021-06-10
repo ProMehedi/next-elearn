@@ -67,11 +67,16 @@ export const updateCourse = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc    Fetch Single Course by ID
-// @route   GET /api/courses/:id
+// @desc    Fetch Single Course by Slug
+// @route   GET /api/courses/:slug
 // @access  Private/Instructor
-export const getCourseById = asyncHandler(async (req, res) => {
-  const course = await Course.findById(req.params.id)
+export const getCourseBySlug = asyncHandler(async (req, res) => {
+  const course = await Course.findOne({ slug: req.params.slug }).exec()
+
+  if (req.user._id.toString() !== course.instructor.toString()) {
+    res.status(400)
+    throw new Error('Unauthorized!')
+  }
 
   if (course) {
     res.json(course)

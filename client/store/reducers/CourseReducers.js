@@ -18,3 +18,22 @@ export const courseCreateReducer = (state = {}, action) => {
       return state
   }
 }
+
+export const courseDetailsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case COURSE.COURSE_DETAILS_REQUEST:
+      return { loading: true }
+
+    case COURSE.COURSE_DETAILS_SUCCESS:
+      return { loading: false, course: action.payload }
+
+    case COURSE.COURSE_DETAILS_FAIL:
+      return { loading: false, error: action.payload }
+
+    case COURSE.COURSE_DETAILS_RESET:
+      return {}
+
+    default:
+      return state
+  }
+}
