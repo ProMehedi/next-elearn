@@ -25,8 +25,26 @@ img {
   max-width: 100%;
 }
 
+.form-control:focus {
+  box-shadow: 0 0 0;
+}
+
 .text-right {
   text-align: right !important;
+}
+
+.removePrevFile {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 3;
+}
+
+.modal .close {
+  background: transparent;
+  border: none;
+  font-size: 35px;
+  line-height: 1;
 }
 
 .pageLoader {

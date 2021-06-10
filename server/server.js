@@ -6,9 +6,12 @@ import dotenv from 'dotenv'
 import userRoutes from './routes/userRoutes.js'
 import instructorRoutes from './routes/instructorRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
+import uploadRoutes from './routes/uploadRoutes.js'
 import connectDB from './config/db.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 import path from 'path'
+
+const __dirname = path.resolve()
 
 // Enable .env
 dotenv.config()
@@ -40,9 +43,15 @@ app.use(`${API_URL}/instructor`, instructorRoutes)
 // Courses Routes
 app.use(`${API_URL}/courses`, courseRoutes)
 
+// Upload Routes
+app.use(`${API_URL}/uploads`, uploadRoutes)
+
 app.get('/', (req, res) => {
   res.send('API is running..')
 })
+
+// Make Static Folder for Uploading
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 // Not Found Middleware
 app.use(notFound)
