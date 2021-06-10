@@ -13,44 +13,17 @@ import ReactPlayer from 'react-player'
 import slugify from 'slugify'
 import CustomCard from '../CustomCard'
 import CustomInput from '../CustomInput'
-import TextEditor from '../TextEditor'
 
-const CourseForm = ({ handleSubmit, course, setCourse }) => {
+import dynamic from 'next/dynamic'
+import axios from 'axios'
+import { ScaleLoader } from 'react-spinners'
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
+
+const CourseForm = ({ course, setCourse }) => {
   const [prevImgUrl, setPrevImgUrl] = useState('')
   const [lessonModal, setLessonModal] = useState(false)
   const [uploading, setUploading] = useState(false)
-
-  const fileInputHandler = () => {
-    document.getElementById('fileInput').click()
-  }
-
-  const uploadImageHandler = async (e) => {
-    setUploading(true)
-    const file = e.target.files[0]
-    const formData = new FormData()
-
-    var reader = new FileReader()
-
-    reader.onload = function (e) {
-      setPrevImgUrl(e.target.result)
-    }
-    reader.readAsDataURL(file)
-
-    formData.append('image', file)
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-      const { data } = await axios.post('/api/uploads', formData, config)
-      setImgUrl(data)
-      setUploading(false)
-    } catch (uploadError) {
-      console.log(uploadError)
-      setUploading(false)
-    }
-  }
 
   const list = [
     {
@@ -292,283 +265,323 @@ const CourseForm = ({ handleSubmit, course, setCourse }) => {
     list.splice(destIndex, 0, list.splice(srcIndex, 1)[0])
   }
 
+  const fileInputHandler = () => {
+    document.getElementById('fileInput').click()
+  }
+
+  const fileRemoveHandler = () => {
+    setPrevImgUrl('')
+    setCourse({ ...course, imgUrl: '' })
+    setCourse({ ...course, imgName: '' })
+  }
+
+  const uploadImageHandler = async (e) => {
+    setUploading(true)
+    const file = e.target.files[0]
+    const formData = new FormData()
+
+    var reader = new FileReader()
+
+    reader.onload = function (e) {
+      setPrevImgUrl(e.target.result)
+    }
+    if (reader) reader.readAsDataURL(file)
+
+    formData.append('image', file)
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+      const { data } = await axios.post('/api/uploads', formData, config)
+      setCourse({ ...course, imgName: data })
+      setUploading(false)
+    } catch (uploadError) {
+      console.log(uploadError)
+      setUploading(false)
+    }
+  }
+
   return (
     <>
-      <Form onSubmit={handleSubmit}>
-        <Row>
-          <Col md={8}>
-            <CustomCard title='Basic Information' classes='mb-3'>
-              <CustomInput
-                label='Course Title'
-                placeholder='Enter Title'
-                value={course.name}
-                onChange={(e) => {
-                  setCourse({ ...course, name: e.target.value })
-                  setCourse({
-                    ...course,
-                    slug: slugify(course.name.toLowerCase()),
-                  })
-                }}
+      <Row>
+        <Col md={8}>
+          <CustomCard title='Basic Information' classes='mb-3'>
+            <CustomInput
+              label='Course Title'
+              placeholder='Enter Title'
+              value={course.name}
+              onChange={(e) => {
+                setCourse({
+                  ...course,
+                  name: e.target.value,
+                  slug: slugify(e.target.value.toLowerCase()),
+                })
+              }}
+            />
+            <Form.Group className='mb-3' controlId='desc'>
+              <Form.Label>Course Description</Form.Label>
+              <ReactQuill
+                theme='snow'
+                value={course.desc}
+                onChange={(html) => setCourse({ ...course, desc: html })}
               />
-              <Form.Group className='mb-3' controlId='desc'>
-                <Form.Label>Course Description</Form.Label>
-                <TextEditor desc={course.desc} setDesc={setCourse} />
-              </Form.Group>
-              <Form.Group className='mb-3' controlId='shortDesc'>
-                <Form.Label>Short Description</Form.Label>
-                <Form.Control
-                  as='textarea'
-                  rows={3}
-                  placeholder='Write About Your Course'
-                  value={course.shortDesc}
-                  onChange={(e) =>
-                    setCourse({ ...course, shortDesc: e.target.value })
-                  }
-                />
-              </Form.Group>
-            </CustomCard>
-
-            <Card className='mb-3'>
-              <Card.Body>
-                <Card.Title className='border-bottom pb-3 mb-3'>
-                  <Row className='align-items-center'>
-                    <Col>Lessons</Col>
-                    <Col className='text-right'>
-                      <Button onClick={() => setLessonModal(true)}>
-                        ADD LESSON <i className='fa fa-plus'></i>
-                      </Button>
-                    </Col>
-                  </Row>
-                </Card.Title>
-
-                <DragDropContext onDragEnd={(params) => onDragEnd(params)}>
-                  <div className='nestableListWrapper'>
-                    <Droppable droppableId='droppable-1'>
-                      {(provided, _) => (
-                        <ul
-                          className='nestableList'
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                        >
-                          {list.map((item, index) => (
-                            <Draggable
-                              key={item.id}
-                              draggableId={`draggable-${item.id}`}
-                              index={index}
-                            >
-                              {(provided, snapshot) => (
-                                <li
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  style={{
-                                    ...provided.draggableProps.style,
-                                    backgroundColor: snapshot.isDragging
-                                      ? '#eceaea'
-                                      : '',
-                                  }}
-                                >
-                                  <div
-                                    className='nestableHandle'
-                                    {...provided.dragHandleProps}
-                                  >
-                                    <i className='fa fa-bars'></i>
-                                  </div>
-                                  <div className='nestableContent'>
-                                    <div className='nestableContentInner'>
-                                      <div className='lessonImg'></div>
-                                      <h5>
-                                        {item.name} - {index}
-                                      </h5>
-                                      <h6>{item.email}</h6>
-                                    </div>
-                                    <div className='nestableContentAction'>
-                                      <Button variant='light'>
-                                        <i className='fa fa-edit'></i>
-                                      </Button>
-                                      <Button variant='danger' className='ms-2'>
-                                        <i className='far fa-trash-alt'></i>
-                                      </Button>
-                                    </div>
-                                  </div>
-                                </li>
-                              )}
-                            </Draggable>
-                          ))}
-                        </ul>
-                      )}
-                    </Droppable>
-                  </div>
-                </DragDropContext>
-              </Card.Body>
-            </Card>
-            <Modal
-              size='lg'
-              show={lessonModal}
-              onHide={() => setLessonModal(false)}
-              aria-labelledby='lessonModal'
-            >
-              <Modal.Header closeButton>
-                <Modal.Title id='lessonModal'>Edit Lesson</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>...</Modal.Body>
-            </Modal>
-          </Col>
-
-          <Col md={4}>
-            <CustomCard title='Course Meta' classes='mb-3'>
-              <CustomInput
-                label='Course Slug'
-                placeholder='Enter Slug (Ex: anotehr-course-name)'
-                value={course.slug}
-                onChange={(e) => setCourse({ ...course, slug: e.target.value })}
-              />
-              <Form.Group className='mb-3'>
-                <Form.Label>Category</Form.Label>
-                <Form.Control
-                  className='form-select'
-                  as='select'
-                  value={course.category}
-                  onChange={(e) =>
-                    setCourse({ ...course, category: e.target.value })
-                  }
-                >
-                  <option value=''>--- SELECT CATEGORY ---</option>
-                  <option value='cat1'>Category 1</option>
-                  <option value='cat2'>Category 2</option>
-                  <option value='cat3'>Category 3</option>
-                </Form.Control>
-              </Form.Group>
-              <CustomInput
-                classes='mb-0'
-                label='Duration (00:00:00)'
-                placeholder='Total Course Duration'
-                value={course.duration}
+            </Form.Group>
+            <Form.Group className='mb-3' controlId='shortDesc'>
+              <Form.Label>Short Description</Form.Label>
+              <Form.Control
+                as='textarea'
+                rows={3}
+                placeholder='Write About Your Course'
+                value={course.shortDesc}
                 onChange={(e) =>
-                  setCourse({ ...course, duration: e.target.value })
+                  setCourse({ ...course, shortDesc: e.target.value })
                 }
               />
-            </CustomCard>
+            </Form.Group>
+          </CustomCard>
 
-            <Card className='mb-3'>
-              <Card.Body>
-                <Card.Title
-                  className={course.paid ? 'border-bottom pb-3 mb-3' : 'mb-0'}
-                >
-                  <Row className='align-items-center'>
-                    <Col>Couse Price</Col>
-                    <Col>
-                      <div className='onoffswitch ms-auto'>
-                        <input
-                          type='checkbox'
-                          name='onoffswitch'
-                          className='onoffswitch-checkbox'
-                          id='myonoffswitch'
-                          tabIndex='1'
-                          checked={!course.paid}
-                          onChange={(e) =>
-                            setCourse({ ...course, paid: !e.target.value })
-                          }
-                        />
-                        <label
-                          className='onoffswitch-label'
-                          htmlFor='myonoffswitch'
-                        >
-                          <span className='onoffswitch-inner'></span>
-                          <span className='onoffswitch-switch'></span>
-                        </label>
-                      </div>
-                    </Col>
-                  </Row>
-                </Card.Title>
-                {course.paid && (
-                  <InputGroup>
-                    <InputGroup.Text>Price ( $ )</InputGroup.Text>
-                    <Form.Control
-                      placeholder='Enter Course Price'
-                      type='number'
-                      value={course.price}
-                      onChange={(e) =>
-                        setCourse({ ...course, price: e.target.value })
-                      }
-                      min={9.99}
-                    />
-                  </InputGroup>
-                )}
-              </Card.Body>
-            </Card>
-
-            <CustomCard title='Preview Video' classes='mb-3'>
-              <Form.Group className='mb-3'>
-                {course.videoUrl && (
-                  <ReactPlayer
-                    controls
-                    width='100%'
-                    height='100%'
-                    url={course.videoUrl}
-                  />
-                )}
-              </Form.Group>
-              <CustomInput
-                classes='mb-0'
-                label='Video URL'
-                placeholder='Enter Video URL'
-                value={course.videoUrl}
-                onChange={(e) =>
-                  setCourse({ ...course, videoUrl: e.target.value })
-                }
-              />
-            </CustomCard>
-
-            <CustomCard title='Featured Image' classes='mb-3'>
-              <Form.Group className='mb-3'>
-                <div className='customFileUpload mb-1 border rounded'>
-                  <img id='image' src={prevImgUrl} />
-                  <div
-                    className='customFileUploadBtn'
-                    onClick={fileInputHandler}
-                    style={{ curson: uploading && 'no-drop' }}
-                  >
-                    <button type='button'>
-                      {uploading ? (
-                        <ScaleLoader />
-                      ) : (
-                        <i className='fa fa-cloud-upload-alt'></i>
-                      )}
-                    </button>
-                  </div>
-                  {prevImgUrl && (
-                    <Button
-                      variant='danger'
-                      className='removePrevFile'
-                      onClick={fileRemoveHandler}
-                    >
-                      <i className='fa fa-trash-alt'></i>
+          <Card className='mb-3'>
+            <Card.Body>
+              <Card.Title className='border-bottom pb-3 mb-3'>
+                <Row className='align-items-center'>
+                  <Col>Lessons</Col>
+                  <Col className='text-right'>
+                    <Button onClick={() => setLessonModal(true)}>
+                      ADD LESSON <i className='fa fa-plus'></i>
                     </Button>
-                  )}
+                  </Col>
+                </Row>
+              </Card.Title>
+
+              <DragDropContext onDragEnd={(params) => onDragEnd(params)}>
+                <div className='nestableListWrapper'>
+                  <Droppable droppableId='droppable'>
+                    {(provided, _) => (
+                      <ul
+                        className='nestableList'
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        {list.map((item, index) => (
+                          <Draggable
+                            key={item.id}
+                            draggableId={item.id.toString()}
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <li
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                style={{
+                                  ...provided.draggableProps.style,
+                                  backgroundColor: snapshot.isDragging
+                                    ? '#eceaea'
+                                    : '',
+                                }}
+                              >
+                                <div
+                                  className='nestableHandle'
+                                  {...provided.dragHandleProps}
+                                >
+                                  <i className='fa fa-bars'></i>
+                                </div>
+                                <div className='nestableContent'>
+                                  <div className='nestableContentInner'>
+                                    <div className='lessonImg'></div>
+                                    <h5>
+                                      {item.name} - {index}
+                                    </h5>
+                                    <h6>{item.email}</h6>
+                                  </div>
+                                  <div className='nestableContentAction'>
+                                    <Button variant='light'>
+                                      <i className='fa fa-edit'></i>
+                                    </Button>
+                                    <Button variant='danger' className='ms-2'>
+                                      <i className='far fa-trash-alt'></i>
+                                    </Button>
+                                  </div>
+                                </div>
+                              </li>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </ul>
+                    )}
+                  </Droppable>
                 </div>
-                <input
-                  name='photo'
-                  id='fileInput'
-                  accept='image/*'
-                  type='file'
-                  onChange={uploadImageHandler}
-                />
-              </Form.Group>
-              {!prevImgUrl && (
-                <CustomInput
-                  classes='mb-0'
-                  label='Image URL'
-                  placeholder='Enter Image URL'
-                  value={course.imgUrl}
-                  onChange={(e) =>
-                    setCourse({ ...course, imgUrl: e.target.value })
-                  }
+              </DragDropContext>
+            </Card.Body>
+          </Card>
+          <Modal
+            size='lg'
+            show={lessonModal}
+            onHide={() => setLessonModal(false)}
+            aria-labelledby='lessonModal'
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id='lessonModal'>Edit Lesson</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>...</Modal.Body>
+          </Modal>
+        </Col>
+
+        <Col md={4}>
+          <CustomCard title='Course Meta' classes='mb-3'>
+            <CustomInput
+              label='Course Slug'
+              placeholder='Enter Slug (Ex: anotehr-course-name)'
+              value={course.slug}
+              onChange={(e) => setCourse({ ...course, slug: e.target.value })}
+            />
+            <Form.Group className='mb-3'>
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                className='form-select'
+                as='select'
+                value={course.category}
+                onChange={(e) =>
+                  setCourse({ ...course, category: e.target.value })
+                }
+              >
+                <option value=''>--- SELECT CATEGORY ---</option>
+                <option value='cat1'>Category 1</option>
+                <option value='cat2'>Category 2</option>
+                <option value='cat3'>Category 3</option>
+              </Form.Control>
+            </Form.Group>
+            <CustomInput
+              classes='mb-0'
+              label='Duration (00:00:00)'
+              placeholder='Total Course Duration'
+              value={course.duration}
+              onChange={(e) =>
+                setCourse({ ...course, duration: e.target.value })
+              }
+            />
+          </CustomCard>
+
+          <Card className='mb-3'>
+            <Card.Body>
+              <Card.Title
+                className={course.paid ? 'border-bottom pb-3 mb-3' : 'mb-0'}
+              >
+                <Row className='align-items-center'>
+                  <Col>Couse Price</Col>
+                  <Col>
+                    <div className='onoffswitch ms-auto'>
+                      <input
+                        type='checkbox'
+                        name='onoffswitch'
+                        className='onoffswitch-checkbox'
+                        id='myonoffswitch'
+                        tabIndex='1'
+                        checked={!course.paid}
+                        onChange={(e) =>
+                          setCourse({ ...course, paid: !e.target.checked })
+                        }
+                      />
+                      <label
+                        className='onoffswitch-label'
+                        htmlFor='myonoffswitch'
+                      >
+                        <span className='onoffswitch-inner'></span>
+                        <span className='onoffswitch-switch'></span>
+                      </label>
+                    </div>
+                  </Col>
+                </Row>
+              </Card.Title>
+              {course.paid && (
+                <InputGroup>
+                  <InputGroup.Text>Price ( $ )</InputGroup.Text>
+                  <Form.Control
+                    placeholder='Enter Course Price'
+                    type='number'
+                    value={course.price}
+                    onChange={(e) =>
+                      setCourse({ ...course, price: e.target.value })
+                    }
+                  />
+                </InputGroup>
+              )}
+            </Card.Body>
+          </Card>
+
+          <CustomCard title='Preview Video' classes='mb-3'>
+            <Form.Group className='mb-3'>
+              {course.videoUrl && (
+                <ReactPlayer
+                  controls
+                  width='100%'
+                  height='100%'
+                  url={course.videoUrl}
                 />
               )}
-            </CustomCard>
-          </Col>
-        </Row>
-      </Form>
+            </Form.Group>
+            <CustomInput
+              classes='mb-0'
+              label='Video URL'
+              placeholder='Enter Video URL'
+              value={course.videoUrl}
+              onChange={(e) =>
+                setCourse({ ...course, videoUrl: e.target.value })
+              }
+            />
+          </CustomCard>
+
+          <CustomCard title='Featured Image' classes='mb-3'>
+            <Form.Group className='mb-3'>
+              <div className='customFileUpload mb-1 border rounded'>
+                <img id='image' src={prevImgUrl} />
+                <div
+                  className='customFileUploadBtn'
+                  onClick={fileInputHandler}
+                  style={{ curson: uploading && 'no-drop' }}
+                >
+                  <button type='button'>
+                    {uploading ? (
+                      <ScaleLoader />
+                    ) : (
+                      <i className='fa fa-cloud-upload-alt'></i>
+                    )}
+                  </button>
+                </div>
+                {prevImgUrl && (
+                  <Button
+                    variant='danger'
+                    className='removePrevFile'
+                    onClick={fileRemoveHandler}
+                  >
+                    <i className='fa fa-trash-alt'></i>
+                  </Button>
+                )}
+              </div>
+              <input
+                name='photo'
+                id='fileInput'
+                accept='image/*'
+                type='file'
+                onChange={uploadImageHandler}
+              />
+            </Form.Group>
+            {!prevImgUrl && (
+              <CustomInput
+                classes='mb-0'
+                label='Image URL'
+                placeholder='Enter Image URL'
+                value={course.imgUrl}
+                onChange={(e) => {
+                  setCourse({ ...course, imgName: '', imgUrl: e.target.value })
+                }}
+              />
+            )}
+          </CustomCard>
+        </Col>
+      </Row>
     </>
   )
 }

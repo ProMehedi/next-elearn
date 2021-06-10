@@ -2,10 +2,14 @@ import dynamic from 'next/dynamic'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
-const TextEditor = ({ desc, setDesc }) => {
+const TextEditor = ({ desc, course, setDesc }) => {
   return (
     <>
-      <ReactQuill theme='snow' value={desc} onChange={setDesc} />
+      <ReactQuill
+        theme='snow'
+        value={desc}
+        onChange={(e) => setDesc({ ...course, desc: e.target.value })}
+      />
     </>
   )
 }
