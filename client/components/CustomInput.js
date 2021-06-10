@@ -9,11 +9,13 @@ const CustomInput = ({
   value,
   onChange,
   classes,
+  size,
 }) => {
   return (
     <Form.Group className={classes}>
-      <Form.Label>{label}</Form.Label>
+      {label && <Form.Label>{label}</Form.Label>}
       <Form.Control
+        size={size}
         placeholder={placeholder}
         type={type}
         value={value}

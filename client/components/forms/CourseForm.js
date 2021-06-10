@@ -17,13 +17,26 @@ import CustomInput from '../CustomInput'
 import dynamic from 'next/dynamic'
 import axios from 'axios'
 import { ScaleLoader } from 'react-spinners'
+import LessonForm from './LessonForm'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 const CourseForm = ({ course, setCourse }) => {
   const [prevImgUrl, setPrevImgUrl] = useState('')
+  const [lesson, setLesson] = useState({
+    title: '',
+    slug: '',
+    duration: '',
+    freePreview: false,
+    videoUrl: '',
+    files: {},
+  })
   const [lessonModal, setLessonModal] = useState(false)
   const [uploading, setUploading] = useState(false)
+
+  const addLessonHandler = () => {
+    console.log(lesson)
+  }
 
   const list = [
     {
@@ -390,9 +403,7 @@ const CourseForm = ({ course, setCourse }) => {
                                 <div className='nestableContent'>
                                   <div className='nestableContentInner'>
                                     <div className='lessonImg'></div>
-                                    <h5>
-                                      {item.name} - {index}
-                                    </h5>
+                                    <h5>{item.name}</h5>
                                     <h6>{item.email}</h6>
                                   </div>
                                   <div className='nestableContentAction'>
@@ -425,7 +436,13 @@ const CourseForm = ({ course, setCourse }) => {
             <Modal.Header closeButton>
               <Modal.Title id='lessonModal'>Edit Lesson</Modal.Title>
             </Modal.Header>
-            <Modal.Body>...</Modal.Body>
+            <Modal.Body>
+              <LessonForm
+                lesson={lesson}
+                setLesson={setLesson}
+                submitHandler={addLessonHandler}
+              />
+            </Modal.Body>
           </Modal>
         </Col>
 
@@ -536,7 +553,10 @@ const CourseForm = ({ course, setCourse }) => {
           <CustomCard title='Featured Image' classes='mb-3'>
             <Form.Group className='mb-3'>
               <div className='customFileUpload mb-1 border rounded'>
-                <img id='image' src={prevImgUrl} />
+                <img
+                  id='image'
+                  src={course.imgUrl ? course.imgUrl : prevImgUrl}
+                />
                 <div
                   className='customFileUploadBtn'
                   onClick={fileInputHandler}
