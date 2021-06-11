@@ -58,3 +58,32 @@ export const detailsCourse = (slug) => async (dispatch, getState) => {
     })
   }
 }
+
+// Update Course Details
+export const updateCourse = (course) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: COURSE.COURSE_UPDATE_REQUEST })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    await axios.put(`/api/courses/${course._id}`, course, config)
+    dispatch({ type: COURSE.COURSE_UPDATE_SUCCESS })
+  } catch (error) {
+    dispatch({
+      type: COURSE.COURSE_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}

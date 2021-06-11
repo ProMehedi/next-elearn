@@ -7,7 +7,11 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import Jumbotron from '../../../components/Jumbotron'
 import LeftNav from '../../../components/LeftNav'
 import CourseForm from '../../../components/forms/CourseForm'
-import { detailsCourse } from '../../../store/actions/courseActions'
+import {
+  detailsCourse,
+  updateCourse,
+} from '../../../store/actions/courseActions'
+import PageLoader from '../../../components/PageLoader'
 
 const CreateCoursePage = () => {
   const [slug, setSlug] = useState('')
@@ -57,34 +61,35 @@ const CreateCoursePage = () => {
     if (error) {
       toast.error(error)
     }
-  }, [error, router, courseData])
+  }, [error, router, success, courseData])
 
   const submitHandler = (e) => {
     e.preventDefault()
 
     // Validations
-    if (!course.name) {
-      toast.error('Name is required!')
-      return false
-    }
-    if (course.name.length < 5) {
-      toast.error('Minimum 5 characters required for Name!')
-      return false
-    }
-    if (!course.videoUrl) {
-      toast.error('Video URL is required!')
-      return false
-    }
-    if (!course.category) {
-      toast.error('Category is required!')
-      return false
-    }
-    if (!course.imgUrl) {
-      toast.error('Image is required!')
-      return false
-    }
+    // if (!course.name) {
+    //   toast.error('Name is required!')
+    //   return false
+    // }
+    // if (course.name.length < 5) {
+    //   toast.error('Minimum 5 characters required for Name!')
+    //   return false
+    // }
+    // if (!course.videoUrl) {
+    //   toast.error('Video URL is required!')
+    //   return false
+    // }
+    // if (!course.category) {
+    //   toast.error('Category is required!')
+    //   return false
+    // }
+    // if (!course.imgUrl) {
+    //   toast.error('Image is required!')
+    //   return false
+    // }
 
     console.log(course)
+    dispatch(updateCourse(course))
   }
 
   if (loading) {
